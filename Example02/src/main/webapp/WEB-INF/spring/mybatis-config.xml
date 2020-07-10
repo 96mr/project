@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<typeAliases>
+		<typeAlias type="com.spring.ex02.vo.MemberVO" alias="MemberVO" />
+		<typeAlias type="com.spring.ex02.vo.BoardVO" alias="BoardVO"/>
+		<typeAlias type="com.spring.ex02.vo.FileVO" alias="FileVO"/>
+		<typeAlias type="com.spring.ex02.vo.FollowVO" alias="FollowVO"/>
+	    <typeAlias type="com.spring.ex02.vo.ProfileVO" alias="ProfileVO"/>
+	    <typeAlias type="com.spring.ex02.vo.LikeVO" alias="LikeVO"/>
+	    <typeAlias type="com.spring.ex02.vo.ReplyVO" alias="ReplyVO"/>
+	    <typeAlias type="com.spring.ex02.vo.NoticeVO" alias="NoticeVO"/>
+	</typeAliases>
+	
+</configuration>

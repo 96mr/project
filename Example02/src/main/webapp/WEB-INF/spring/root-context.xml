@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 오라클 접속 -->
+    <bean id="dataSource"	class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${spring.datasource.driver-class-name}" />
+		<property name="url" value="${spring.datasource.url}" />
+		<property name="username" value="${spring.datasource.username}" />
+		<property name="password" value="${spring.datasource.password}" />
+	</bean>
+   	<!-- 데이터베이스 설정 값이 기술되어 있는 .properties 파일 위치 설정 -->
+	<context:property-placeholder location="classpath:database.properties" />
+
+	<!-- MyBatis 맵퍼의 SQL 문장에 대한 파라미터 및 리턴 타입을 담을 클래스를 검색할 패키지 지정 (mybatis-spring) -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="/resources/mappers/*.xml"></property>
+		<property name="configLocation" value="/WEB-INF/spring/mybatis-config.xml"/>
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 해당 Project의 Mapper Package를 적어야 함. ex) com.example.Mapper -->
+		<property name="basePackage" value="com.spring.ex02.mapper" />
+	</bean>
+	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
+	<aop:aspectj-autoproxy/>
+	<bean id = "logAop" class="com.spring.ex02.aop.LogAop" />
+	
+	<!-- 트랜잭션 관련 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 트랜잭션 어노테이션 인식 -->
+	<tx:annotation-driven/>
+	
+	<context:component-scan base-package="com.spring.ex02" />
+</beans>

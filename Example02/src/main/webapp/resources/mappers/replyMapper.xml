@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.ex02.mapper.ReplyMapper">
+	<resultMap id="replyResult" type="com.spring.ex02.vo.ReplyVO" autoMapping="true">
+		<result property="repno" column="REPNO"/>
+		<result property="writer_id" column="WRITER_ID"/>
+		<association property="member" column="WRITER_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.ProfileList">
+			<id property="user_no" column="USER_NO"/>
+		</association>
+	</resultMap>
+	
+	
+	<!-- 댓글 작성  -->
+	<insert id="addReply">
+		insert into board_reply (repno, bno, content, writer_id, parent_id) 
+		values(reply_no_seq.nextval, #{bno}, #{content}, #{writer_id}, #{parent_id, jdbcType=NUMERIC})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<update id="deleteReply">
+	<![CDATA[
+		update board_reply set del_chk = 'Y' where repno = #{repno}
+	]]>
+	</update>
+
+	<!-- 댓글 리스트 -->
+	<select id = "replyList" resultMap="replyResult">
+	<![CDATA[
+		select repno, bno, content, del_chk,
+			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
+	             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
+	         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
+	    	end regdate , 
+    		writer_id, parent_id
+		from (select rownum rn, b.* from board_reply b join (select user_no, id from member) m
+						on b.writer_id = m.user_no
+						start with parent_id = 0
+						connect by prior repno = parent_id
+						order siblings by repno asc) r
+		where r.bno = #{bno}
+	]]>
+	</select>
+	
+</mapper>

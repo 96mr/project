@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.ex02.mapper.MemberMapper">
+	<resultMap id="memberProfile" type="MemberVO" autoMapping="true">
+		<result property="user_no" column="USER_NO"/>
+		<association property="profile" column="USER_NO" javaType="ProfileVO" select="com.spring.ex02.mapper.MemberMapper.selectProfile">
+			<id property="user_no" column="USER_NO"/>
+		</association>
+	</resultMap>
+	
+	<resultMap id="profileResult" type="ProfileVO" autoMapping="true">
+		<result property="user_no" column="USER_NO"/>
+		<result property="name" column="NAME"/>
+		<result property="introduce" column="INTRODUCE"/>
+		<result property="image" column="IMAGE"/>
+		<association property="image_file" column="USER_NO" javaType="FileVO" select="com.spring.ex02.mapper.MemberMapper.selectProfileImage">
+			<id property="fno" column="FNO"/>	
+		</association>
+	</resultMap>
+	
+	<!-- 회원가입 -->
+	<insert id ="insertMember">
+		<selectKey keyProperty="user_no" resultType="int" order="BEFORE">
+			select board_no_seq.nextval FROM DUAL
+		</selectKey>
+		insert into Member(user_no,id,password,birth,phone,email) 
+		values(#{user_no}, #{id}, #{password},
+				#{birth, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 아이디로 회원정보 가져오기 (로그인 시 사용) -->
+	<select id="selectById" resultType="com.spring.ex02.vo.MemberVO">
+		select * from member
+		where id = #{id}
+	</select> 
+	
+	<select id="selectByNo" resultMap="memberProfile">
+		select user_no, id from member
+		where user_no = #{user_no}
+	</select> 
+	
+	<!-- 회원번호로 아이디, 게시글 등 정보 가져오기 -->
+	<select id="ProfileList" resultMap="memberProfile">
+		select * from (select user_no, id from member) m join profile p
+		on m.user_no = p.user_no
+		where m.user_no = #{user_no}
+	</select>
+	
+	<update id="updateMember">
+		update member
+		set id = #{id}, birth = #{birth, jdbcType=VARCHAR},phone = #{phone, jdbcType=VARCHAR},email = #{email, jdbcType=VARCHAR}
+		where user_no = #{user_no}  
+	</update>
+	
+	<update id="updatePassword">
+		update member
+		set password = #{password}
+		where user_no = #{user_no}  
+	</update>
+	
+	<!-- 프로필 -->
+	<insert id = "insertProfile">
+		insert into Profile values(#{user_no},#{name}, #{introduce, jdbcType=VARCHAR}, #{image})
+	</insert>
+	
+	<!-- 프로필 이미지 파일 -->
+	<insert id = "insertProfileImageFile">
+		<selectKey keyProperty="fno" resultType="int" order="BEFORE">
+			select file_no_seq.nextval FROM DUAL
+		</selectKey>
+		insert into fileinfo(fno, org_name, save_name, f_size, reg_id)
+		values(#{fno}, 'profile_default.png', 'c66bd00a3eea446ab33a227a6bc28942.png', 10753, #{reg_id})
+	</insert>
+	
+	<select id="selectProfile" resultMap="profileResult">
+		select * from profile p join fileinfo f
+		on p.image = f.fno
+		where user_no = #{user_no}
+	</select>
+	
+	<select id="selectProfileImage" resultType="FileVO">
+		select f.fno, org_name, save_name, round(f_size/1024, 1) as f_size 
+		from fileinfo f, profile p
+		where f.fno = p.image
+		and p.user_no = #{user_no}
+	</select>
+
+	<update id="updateProfile">
+		update profile
+		set name = #{name}, introduce= #{introduce} 
+		where user_no = #{user_no}
+	</update>
+	
+	<update id="updateProfileImage">
+		update fileinfo
+		set org_name = #{org_name}, save_name = #{save_name}, f_size = #{f_size}
+		where fno = #{fno}
+	</update>
+</mapper>

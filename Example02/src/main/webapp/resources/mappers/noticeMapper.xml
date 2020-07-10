@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.ex02.mapper.NoticeMapper">
+	<resultMap id="NoticeResult" type="com.spring.ex02.vo.NoticeVO" autoMapping="true">
+		<result property="noteno" column="NOTENO"/>
+		<result property="m_id" column="M_ID"/>
+		<association property="member" column="M_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.ProfileList">
+			<id property="user_no" column="USER_NO"/>
+		</association>
+	</resultMap>
+	
+	<!-- 알림+  -->
+	<insert id="addNotice">
+		insert into notice (noteno, m_id, t_id, notetype, bno, content) 
+		values(notice_no_seq.nextval, #{m_id}, #{t_id}, #{notetype}, #{bno, jdbcType=NUMERIC}, #{content, jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 알림 리스트 -->
+	<select id = "noticeList" resultMap="NoticeResult">
+		select * from notice 
+		where t_id = #{id}
+		order by regdate desc
+	</select>
+	
+	<!-- 알림 확인 -->
+	<update id="chkNotice">
+		update notice
+		set chkdate = sysdate
+		where t_id = #{id} 
+		and chkdate is null
+	</update>	
+	
+	<!-- 새로운 알림 -->
+	<select id="newNotice" resultType="int">
+		select count(*) from notice
+		where t_id = #{id} 
+		and chkdate is null
+	</select>
+	
+</mapper>

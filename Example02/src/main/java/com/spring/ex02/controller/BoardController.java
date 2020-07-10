@@ -53,12 +53,12 @@ public class BoardController {
 	}
 	
 	//프로필
-	@RequestMapping(value = "{id}/profile", method = RequestMethod.GET)
-	public String profile(@PathVariable("id") String id,
+	@RequestMapping(value = "{user}/profile", method = RequestMethod.GET)
+	public String profile(@PathVariable("user") String id,
 							@RequestParam(value="page", defaultValue="0") int page, 
 							HttpSession session, Model model) throws Exception {
 		String member = (String) session.getAttribute("sessionID");
-		Map<String, Object> map = boardService.profileBoard(id, member, 0, page); //회원의 게시글
+		Map<String, Object> map = boardService.memberProfile(id, member, 0, page); //회원의 게시글
 		model.addAttribute("user", map.get("user"));
 		model.addAttribute("board", map.get("board"));
 		model.addAttribute("board_cnt", map.get("board_cnt"));
@@ -71,11 +71,12 @@ public class BoardController {
 		String member = (String) session.getAttribute("sessionID");
 		Map<String, Object> map = null;
 		if(tab.equals("writing"))
-			map = boardService.profileBoard(id, member, 1, page); 
+			map = boardService.memberProfile(id, member, 1, page); 
 		else if(tab.equals("media"))
-			map = boardService.profileBoard(id, member, 2, page);
+			map = boardService.memberProfile(id, member, 2, page);
 		else if(tab.equals("likes"))
-			map = boardService.profileBoard(id, member, 3, page);
+			map = boardService.memberProfile(id, member, 3, page);
+		
 		model.addAttribute("user", map.get("user"));
 		model.addAttribute("board", map.get("board"));
 		model.addAttribute("board_cnt", map.get("board_cnt"));
@@ -94,7 +95,7 @@ public class BoardController {
 	public Object infiniteBoard(@RequestParam("page") int page, @RequestParam("user") String pid, 
 								@RequestParam("tab") int tab, HttpSession session) throws Exception {
 		String id = (String) session.getAttribute("sessionID");
-		return boardService.profileBoard(pid, id, tab, page).get("board");
+		return boardService.memberProfile(pid, id, tab, page).get("board");
 	}
 	
 	@ResponseBody
@@ -115,8 +116,14 @@ public class BoardController {
 	
 	@ResponseBody
 	@RequestMapping(value="/write", method = RequestMethod.POST)
-	public String boardWrite(@RequestParam(value="content", required=false) String content, @RequestParam(value="file", required=false) MultipartFile[] file, HttpSession session, Model model) throws Exception {
+	public String boardWrite(@RequestParam(value="content", required=false) String content, 
+							@RequestParam(value="file", required=false) MultipartFile[] file, 
+							HttpSession session, RedirectAttributes rttr) throws Exception {
 		String user_id = (String) session.getAttribute("sessionID");
+		if(user_id == null) {
+			rttr.addFlashAttribute("msg","게시글은 로그인 후 작성할 수 있습니다.");
+			return "redirect:/login";
+		}
 		BoardVO vo = new BoardVO();
 		vo.setContent(content);						
 		boardService.boardwrite(user_id, vo, file);
@@ -166,7 +173,6 @@ public class BoardController {
 		// 해당 게시글 bno를 이용해서 select해온다
 		String user_id = (String) session.getAttribute("sessionID");
 		BoardVO vo = boardService.boardDetail(bno, user_id);
-		System.out.println(vo.getReply());
 		model.addAttribute("board",vo);
 		return "detail";
 	}

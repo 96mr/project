@@ -119,9 +119,17 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 .content-login input{width:65%; padding:1em; margin:1em; border:lightgray 1px solid; border-radius: 5px;}
 .content-login button{width:20%; font-weight:bold; padding:1em; margin:1em; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 5px;}
 
+/*회원정보 수정 부분*/
+.setting-form{width:70%; min-height: 100vh; margin:auto; text-align: center; padding:1em;}
+.setting-form h6{width:22%;margin:1%; display:inline-block}
+.setting-form input{width:66%; padding:3%; margin:3% 1%; border:lightgray 1px solid; border-radius: 5px;}
+.setting-form button{width:25%; font-weight:bold; padding:1em; margin:1em; color:white; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 5px;}
+
+
+
 /*검색부분*/
-.search-box input{width:70%;padding:1em; margin:.5em; font-size:110%; background-color:#F4F7F5; border:none; border-radius: 20px;}
-.search-box button{width:15%; font-weight:bold; padding:1em; margin:.5em; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 15px;}
+.search-box input{width:70%;padding:2.5%; margin:2%; font-weight:bold; font-size:110%; background-color:#F4F7F5; border:none; border-radius: 20px;}
+.search-box button{width:15%; font-weight:bold; padding:2.5%; margin:2%; color:white; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 15px;}
 
 /*프로필*/
 .profile{ padding:1em; height:180px;border-bottom: lightgray 1px solid;}

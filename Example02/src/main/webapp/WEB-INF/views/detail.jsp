@@ -167,7 +167,7 @@
 				cache : false,
 				data: {bno:board},
 				success: function(data){
-					if(data.length != 0){	
+					if(data){	
 						var str = "";	
 						var comment_cnt = 0;	
 						$.each(data, function(index, value){

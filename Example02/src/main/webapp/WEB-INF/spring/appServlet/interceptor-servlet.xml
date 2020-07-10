@@ -17,6 +17,7 @@
 			<mapping path="/unFollow"/>
 			<mapping path="/like/add"/>
 			<mapping path="/like/delete"/>
+			<mapping path="/alarms"/>
 			<mapping path="/settings"/>
 			<mapping path="/settings/account"/>
 			<mapping path="/settings/password"/>

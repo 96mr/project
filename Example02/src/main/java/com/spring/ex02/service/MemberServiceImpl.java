@@ -73,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
+	@Transactional
 	public ProfileVO selectProfile(String id) throws Exception {
 		int no = dao.selectById(id).getUser_no();
 		return dao.selectProfile(no);
@@ -100,7 +101,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public int editMember(MemberVO member, String user) throws Exception {
+	public int updateMember(MemberVO member, String user) throws Exception {
 		MemberVO vo = dao.selectById(user);
 		if(member.getPassword().equals(vo.getPassword())) {
 			member.setUser_no(vo.getUser_no());
@@ -114,7 +115,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public int editPassword(String id,String pw, String new_pw) throws Exception {
+	public int updatePassword(String id,String pw, String new_pw) throws Exception {
 		MemberVO user = dao.selectById(id);
 		
 		if(passwordEncoder.matches(pw, user.getPassword())) {

@@ -151,15 +151,16 @@ public class MemberController {
 	@RequestMapping(value = "/settings/account", method = RequestMethod.POST) //로그인 페이지 이동
 	public String edit_account(@Valid @ModelAttribute("vo") MemberVO member, BindingResult result, 
 									HttpSession session, RedirectAttributes rttr) throws Exception {
-		String user = (String) session.getAttribute("sessionID");
 		if(result.hasErrors()) {
-			System.out.println(result.getAllErrors());
 			return "settings/edit_account";
 		}
-		int joinResult = service.editMember(member, user);
+		
+		String user = (String) session.getAttribute("sessionID");	
+		int joinResult = service.updateMember(member, user); //회원정보수정
+		
 		if(joinResult == 1) {
 			if(!user.equals(member.getId())) {
-				session.setAttribute("sessionID", member.getId());
+				session.setAttribute("sessionID", member.getId());  //세션 아이디 변경
 			}
 			rttr.addFlashAttribute("msg", "회원정보가 수정되었습니다!");
 			return "redirect:/settings";
@@ -187,7 +188,7 @@ public class MemberController {
 			return "settings/edit_password";
 		}
 
-		int joinResult = service.editPassword(user, pw, new_pw);
+		int joinResult = service.updatePassword(user, pw, new_pw);
 		
 		if(joinResult == 1) {
 			rttr.addFlashAttribute("msg", "비밀번호가 변경되었습니다!");

@@ -48,12 +48,14 @@
 		where m.user_no = #{user_no}
 	</select>
 	
+	<!-- 회원정보수정 -->
 	<update id="updateMember">
 		update member
 		set id = #{id}, birth = #{birth, jdbcType=VARCHAR},phone = #{phone, jdbcType=VARCHAR},email = #{email, jdbcType=VARCHAR}
 		where user_no = #{user_no}  
 	</update>
 	
+	<!-- 비밀번호변경 -->
 	<update id="updatePassword">
 		update member
 		set password = #{password}
@@ -74,12 +76,14 @@
 		values(#{fno}, 'profile_default.png', 'c66bd00a3eea446ab33a227a6bc28942.png', 10753, #{reg_id})
 	</insert>
 	
+	<!-- 프로필 가져오기 -->
 	<select id="selectProfile" resultMap="profileResult">
 		select * from profile p join fileinfo f
 		on p.image = f.fno
 		where user_no = #{user_no}
 	</select>
 	
+	<!-- 프로필 사진 -->
 	<select id="selectProfileImage" resultType="FileVO">
 		select f.fno, org_name, save_name, round(f_size/1024, 1) as f_size 
 		from fileinfo f, profile p

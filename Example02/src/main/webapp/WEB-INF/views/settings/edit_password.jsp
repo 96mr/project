@@ -34,12 +34,12 @@
 			</div>
 			<div class="setting-form">
 				<form method="post" autocomplete="off">
-					<h5>현재 비밀번호</h5>
+					<h6>현재 비밀번호</h6>
 					<input  type="password" name="pw" id="user_CurrentPw" placeholder="현재 비밀번호를 입력하세요"/><br />
-					<h5>비밀번호 변경</h5>
+					<h6>비밀번호 변경</h6>
 					<input  type="password" name="new_pw" id="userPw" placeholder="변경할 비밀번호를 입력하세요"/><br />
 					<small id="pwNotice"></small><br>
-					<h5>비밀번호 확인</h5>
+					<h6>비밀번호 확인</h6>
 					<input  type="password" name="new_pwChk" id="pwChk" placeholder="변경할 비밀번호 확인"/><br />
 					<small id="pwChkNotice"></small><br>
 					<button type="submit" name="button">수정하기</button>

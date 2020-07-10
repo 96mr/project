@@ -13,6 +13,7 @@ import com.spring.ex02.dao.FollowDao;
 import com.spring.ex02.dao.MemberDao;
 import com.spring.ex02.dao.NoticeDao;
 import com.spring.ex02.vo.FollowVO;
+import com.spring.ex02.vo.MemberVO;
 import com.spring.ex02.vo.NoticeVO;
 
 @Service("FollowService")
@@ -28,21 +29,35 @@ public class FollowServiceImpl implements FollowService {
 	
 	@Override
 	public List<FollowVO> followingById(String id) throws Exception{	//팔로잉 목록
-		int user_no = memberdao.selectById(id).getUser_no();
+		MemberVO vo = memberdao.selectById(id);
+		if(vo == null) {
+			return null;
+		}
+		int user_no = vo.getUser_no();
 		return followdao.following(user_no);
 	}
 	
 	@Override
 	public List<FollowVO> followerById(String id) throws Exception{		//팔로워 목록
-		int user_no = memberdao.selectById(id).getUser_no();
+		MemberVO vo = memberdao.selectById(id);
+		if(vo == null) {
+			return null;
+		}
+		int user_no = vo.getUser_no();
 		return followdao.follower(user_no);
 	}
 	
 	
 	@Override
 	public Boolean isFollow(String user_id, String id) throws Exception {	//팔로잉 중인가?
-		int m_id = memberdao.selectById(user_id).getUser_no();
-		int t_id = memberdao.selectById(id).getUser_no();
+		MemberVO m_vo = memberdao.selectById(user_id);
+		MemberVO t_vo = memberdao.selectById(id);
+		if(m_vo == null || t_vo == null) {
+			return false;
+		}
+		int m_id = m_vo.getUser_no();
+		int t_id = t_vo.getUser_no();
+		
 		FollowVO vo = new FollowVO(m_id, t_id);
 		FollowVO result = followdao.isFollow(vo);
 		if(result == null)
@@ -54,8 +69,13 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	@Transactional
 	public int addFollow(String user_id, String id) throws Exception{
-		int m_id = memberdao.selectById(user_id).getUser_no();
-		int t_id = memberdao.selectById(id).getUser_no();
+		MemberVO m_vo = memberdao.selectById(user_id);
+		MemberVO t_vo = memberdao.selectById(id);
+		if(m_vo == null || t_vo == null) {
+			return 0;
+		}
+		int m_id = m_vo.getUser_no();
+		int t_id = t_vo.getUser_no();
 		FollowVO result = followdao.isFollow(new FollowVO(m_id, t_id));
 		if(result == null) {
 			if(m_id != t_id) {
@@ -73,8 +93,13 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	@Transactional
 	public int unFollow(String user_id, String id) throws Exception {
-		int m_id = memberdao.selectById(user_id).getUser_no();
-		int t_id = memberdao.selectById(id).getUser_no();
+		MemberVO m_vo = memberdao.selectById(user_id);
+		MemberVO t_vo = memberdao.selectById(id);
+		if(m_vo == null || t_vo == null) {
+			return 0;
+		}
+		int m_id = m_vo.getUser_no();
+		int t_id = t_vo.getUser_no();
 		FollowVO vo = new FollowVO(m_id, t_id);
 		FollowVO result = followdao.isFollow(vo);
 		if(result != null) {
@@ -87,8 +112,14 @@ public class FollowServiceImpl implements FollowService {
 
 	@Override
 	public Map<String, Object> ffCount(String id) throws Exception{
-		int user_no = memberdao.selectById(id).getUser_no();
 		Map<String,Object> map = new HashMap<String,Object>();
+		MemberVO vo = memberdao.selectById(id);
+		int user_no;
+		if(vo == null) {
+			user_no = 0;
+		}else {
+			user_no = vo.getUser_no();
+		}
 		map.put("follow", followdao.followCount(user_no));
 		map.put("follower", followdao.followerCount(user_no));
 		return map;

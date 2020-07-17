@@ -85,9 +85,11 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 .timeline .board a{text-decoration: none; color:black;}
 .timeline .board-bottom{padding:.2em 2em; margin:auto;}
 .board-dropdown{float:right;z-index:50;width:20%; padding:2%; text-align:center}
-.board-dropdown div{position: relative;}
-.board-dropdown ul{display:none;position:relative;top:-20px;left:-30px; width:80%;list-style:none;padding:10%; border-radius:10px;background-color:white;}
-.board-dropdown ul li{padding:1%}
+#board-modal{display:none; width:150px; height:auto; border-radius:10px;  text-align:center; background-color:white; box-shadow:3px 3px 3px lightgray}
+#board-modal ul{width:95%; padding:5% 0; font-size:110%;list-style:none; margin:auto;  letter-spacing:5px;text-align:center; background-color:white;}
+#board-modal ul li{margin:2%;  padding:2%;color: black; cursor:pointer}
+#board-modal ul li:hover{background-color:#F4F7F5;color:#8c918d; }
+#board-modal ul li:first-child{visibility:hidden; width: 0; height: 0; font-size:0}
 .unlike, .like{display:none;}
 .unlike.active, .like.active{display:inline;}
 .board-icon{cursor:pointer; display:inline-block; font-size:110%;font-weight:bold; width:15%;margin:1%;}
@@ -125,10 +127,16 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 .setting-form input{width:66%; padding:3%; margin:3% 1%; border:lightgray 1px solid; border-radius: 5px;}
 .setting-form button{width:25%; font-weight:bold; padding:1em; margin:1em; color:white; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 5px;}
 
-
+.user-find{width:70%; min-height: 100vh; margin:auto;padding:1em;}
+.user-find-header{width:90%; margin:2% auto 5% auto; text-align:center; }
+.user-find h5{width:17%;margin:0.1em; display:inline-block}
+.user-find input:not([type="radio"]){width:50%; padding:1em; margin:1em; border:lightgray 1px solid; border-radius: 5px;}
+.user-find input[type="radio"]{padding:1em; margin:1em;}
+.user-find button{width:15%; font-weight:bold; padding:1em; margin:1em; color:white; letter-spacing:2px;background-color:#a863e0;border:#a863e0 1px solid; border-radius: 5px;}
+.user-find .how_find{display:none;}
 
 /*검색부분*/
-.search-box input{width:70%;padding:2.5%; margin:2%; font-weight:bold; font-size:110%; background-color:#F4F7F5; border:none; border-radius: 20px;}
+.search-box input{width:70%;padding:2.5%; margin:2%; font-size:110%; background-color:#F4F7F5; border:none; border-radius: 20px;}
 .search-box button{width:15%; font-weight:bold; padding:2.5%; margin:2%; color:white; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 15px;}
 
 /*프로필*/
@@ -192,6 +200,18 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 #modal-comment .modal-header{text-align:center}
 #modal-comment .modal-header span:not(.close){font-size:120%;font-weight:bold;width:80%;padding-bottom:1%;cursor:pointer}
 #modal-comment .modal-content{margin:auto; padding:1% 2%; border:none;text-align:center}
+
+/*팝업창*/
+#board-popup{position:fixed; width:100%; height:100%; top:0; left:0;  background:rgba(0,0,0,0.3);}
+#board-popup .modal-context{width:30%; min-width:150px; margin:15% auto; padding:2%; border-radius:10px; background-color:white}
+#board-popup .modal-header{text-align:center; border:none;}
+#board-popup .modal-header span{color:white; margin-right:2%;}
+#board-popup .modal-content div{margin:5%;text-align:center; color:black; font-weight:bold; font-size:120%;}
+#board-popup .modal-content ul{width:90%;text-align:center; margin:auto; padding:0.5em 0px;}
+#board-popup .modal-content ul li{width:40%; height:50px;margin:2%; padding:2%;display:inline-block; font-size:110%; cursor: pointer;
+									color:black; border-radius:10px; background-color:#F4F7F5}
+#board-popup .modal-content ul li:hover{background-color:#b3b7b3}
+#board-popup .modal-content ul li a{text-decoration:none; color:black}
 
 /*프로필 수정*/
 #editProfile {width:100%; min-width:300px; height:50%; margin:auto; text-align:center;border-radius:10px; padding:5% 1%; background:#fff}

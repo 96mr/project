@@ -47,37 +47,36 @@
 									<a href="${pageContext.request.contextPath}/${list.member.id}/profile">
 										<span class="board-member-image"><img src="${pageContext.request.contextPath }/resources/images/${list.member.profile.image_file.save_name}" /></span> 
 										<span class="board-member-name">${list.member.profile.name }</span> 
-										<span class="board-member-id">@ ${list.member.id }</span>
+										<span class="board-member-id">${list.member.id }</span>
 									</a>
-									<c:if test="${sessionID eq list.member.id }">
-										<div class="board-dropdown">
-											<i class="fas fa-angle-down fa-2x"></i>
-											<ul>
-												<li><a><i class="fas fa-trash-alt"></i>삭제하기</a></li>
-												<li><a>취소</a></li>
-											</ul>
-										</div>
-									</c:if>
 									<c:if test="${not empty list.files }">
-										<c:forEach var="files" items="${list.files }">
-											<div class="board-image-list">
-												<span> <img
-													src="${pageContext.request.contextPath }/resources/images/${files.save_name }" />
-												</span>
+										<div class="swiper-container">
+									    	<div class="swiper-wrapper">
+												<c:forEach var="files" items="${list.files }">
+													<div class="swiper-slide">
+														<div class="board-image-list">
+															<span> 
+															<img src="${pageContext.request.contextPath }/resources/images/${files.save_name }" />
+															</span>
+														</div>
+													</div>
+												</c:forEach>
 											</div>
-										</c:forEach>
+										  <div class="swiper-pagination"></div>
+										</div>
 									</c:if>
 									<div class="board-txt">${list.content }</div>
 								</div>
 							</div>
 							<div class="board-bottom">
-								<div class="board-icon"> 
-									<span onclick="likeButton(${list.bno})" style="color:red;">
+								<div class="board-icon">
+									<span onclick="likeButton(${list.bno})" style="color: red;"> 
 										<span class="unlike <c:if test='${list.islike == 0 }'>active</c:if>"><i class='far fa-heart'></i></span> 
 										<span class="like <c:if test='${list.islike == 1 }'>active</c:if>"><i class='fas fa-heart'></i></span>
+									
 									</span>
 									<span class="like-cnt" onclick="liker_list(${list.bno})">${fn:length(list.liker_list)}</span>
-								</div> 
+								</div>
 								<div class="board-icon">
 									<a href="${pageContext.request.contextPath}/${list.member.id}/${list.bno}">
 									<span><i class="far fa-comment-alt"></i></span>
@@ -85,7 +84,13 @@
 									</a>
 								</div>
 								<span class='board-regdate'>${list.regdate}</span>
-							</div>	
+								
+								<c:if test="${sessionID eq list.member.id }">
+									<div class="board-dropdown">
+										<i class="fas fa-angle-down fa-2x"></i>
+									</div>
+								</c:if>
+							</div>
 						</div>
 					</c:forEach>
 				</article>
@@ -105,6 +110,26 @@
 		</div>
 	</div>
 	
+	<div id="full-image" class="modal">
+		<div class="modal-header">
+			<span class="close"><i class="fas fa-times"></i></span>
+		</div>
+		<div class="full-image-list">
+		</div>
+	</div>
+	<div id="board-modal">
+			<ul>
+				<li></li>
+				<li><i class="fas fa-trash-alt"></i><span id="board-delete">삭제</span></li>
+				<li><span>기능</span></li>
+			</ul>
+	</div>
+
+	<div id ="board-popup" class="modal">
+		<div class="modal-context">
+		</div>
+	</div>
+		
 	<script type="text/javascript" charset="utf-8">
         var contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
 		var loginID = "<c:out value='${sessionID}'/>";

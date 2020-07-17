@@ -136,7 +136,7 @@ public class BoardController {
 	public String fullImage(@PathVariable("id") String id, @PathVariable("board_no") int bno, HttpServletRequest request, Model model) throws Exception {
 		// 해당 게시글 bno를 이용해서 select해온다
 		String user_id = (String) request.getSession().getAttribute("sessionID");
-		BoardVO vo = boardService.boardDetail(bno, user_id);
+		BoardVO vo = boardService.boardDetail(bno, id, user_id);
 		StringBuffer str = new StringBuffer("<div data-bno='"+vo.getBno()+"'><div class='swiper-container' >\n <div class='swiper-wrapper'>");
 		
 		if(vo != null) {
@@ -172,7 +172,7 @@ public class BoardController {
 	public String detail(@PathVariable("id") String id, @PathVariable("board_no") int bno, HttpSession session, Model model) throws Exception {
 		// 해당 게시글 bno를 이용해서 select해온다
 		String user_id = (String) session.getAttribute("sessionID");
-		BoardVO vo = boardService.boardDetail(bno, user_id);
+		BoardVO vo = boardService.boardDetail(bno, id, user_id);
 		model.addAttribute("board",vo);
 		return "detail";
 	}
@@ -195,6 +195,19 @@ public class BoardController {
 		model.addAttribute("search_result",vo);
 		return "search";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/board/delete", method = RequestMethod.POST)
+	public int deleteBoard(@RequestParam("bno") int bno, HttpSession session) throws Exception{
+		String login_id = (String) session.getAttribute("sessionID");
+		if(login_id == null) {
+			return -1;
+		}
+		int result = boardService.deleteBoard(bno, login_id);
+		return result;
+	}
+	
+	
 	
 	@RequestMapping(value = "/edit/profile", method = RequestMethod.GET)
 	public String edit_profile(HttpSession session, Model model) throws Exception {

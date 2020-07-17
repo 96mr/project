@@ -15,7 +15,7 @@
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 
 
-<title></title>
+<title>회원정보 변경</title>
 </head>
 <body>
 	<c:if test="${not empty msg}">
@@ -39,12 +39,12 @@
 				<small id="idNotice"></small><br>
 				<form:errors path="id" element="small"/><br>	
 				<h6>생년월일</h6>
-				<input class="input-birth" type="text" name="birth" id="birth" placeholder="ex.19990101"/><br>
+				<form:input path="birth" class="input-birth" type="text" name="birth" id="birth" placeholder="ex.19990101"/><br>
 				<small id = "birthNotice"></small><br>
 				<h6>이메일</h6>
-				<input type="email" name="email" placeholder="선택항목 : 이메일을 입력하세요(ex.abcd@aaa.com)"/><br />
+				<form:input path="email" type="email" name="email" placeholder="선택항목 : 이메일을 입력하세요(ex.abcd@aaa.com)"/><br />
 				<h6>휴대폰</h6>
-				<input type="text" name="phone" placeholder="선택항목 : -를 제외한 번호만 입력해주세요(ex.01012345678)"/><br />
+				<form:input path="phone" type="text" name="phone" placeholder="선택항목 : -를 제외한 번호만 입력해주세요(ex.01012345678)"/><br />
 				<h6>현재 비밀번호</h6>
 				<form:input path="password" type="password" name="pw" id="userPw" placeholder="수정하려면 현재 비밀번호를 입력하세요"/><br />
 				<small id="pwNotice"></small><br>

@@ -73,4 +73,10 @@ public class BoardDaoImpl implements BoardDao {
 		map.put("page", page);
 		return sqlSession.selectList(namespace+".likeList", map);
 	}
+	
+	@Override
+	public void deleteBoard(int bno) throws Exception {
+		sqlSession.update(namespace+".deleteBoard", bno);
+	}
+	
 }

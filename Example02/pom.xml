@@ -28,7 +28,7 @@
 	</repositories>
 
 	<dependencies>
-	<!-- 스프링 시큐리티 -->
+	<!-- spring security -->
 		<dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
@@ -44,8 +44,24 @@
             <artifactId>spring-security-config</artifactId>
             <version>${org.springsecurity-version}</version>
         </dependency>
-	
-	
+        
+		<!-- gmail stmp -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.integration</groupId>
+		    <artifactId>spring-integration-mail</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		
 		<!-- web socket -->
 		<dependency>
     		<groupId>javax.websocket</groupId>
@@ -53,7 +69,6 @@
    			<version>1.1</version>
     		<scope>provided</scope>
 		</dependency>
-		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-websocket</artifactId>
@@ -96,7 +111,7 @@
     		<version>2.0.1.Final</version>
 		</dependency>
 		
-		<!--Mybatis jbc 관련 -->
+		<!--Mybatis jdbc -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>

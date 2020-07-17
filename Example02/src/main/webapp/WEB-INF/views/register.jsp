@@ -19,14 +19,11 @@
 	</script>
 </c:if>
 	<div class="allcontainer">
-		<nav>
-			<a href="${pageContext.request.contextPath}/"><img src="logo.png" width="50px" alt="logo" /></a>
-		</nav>
-
 		<section class="content-login">
+			<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath }/resources/images/logo.png" width="50px" alt="logo" /></a>
 			<h1>회원가입</h1>
 			<form:form method="post" commandName="vo" autocomplete="off">
-				<h3>필수항목</h3>
+				<h4>필수항목</h4>
 				<h5 style="width:17%;margin:0.1em; display:inline-block">아이디</h5>
 				<form:input path="id" type="text" name="id" id="userId" placeholder="아이디를 입력하세요"/><br />
 				<small id="idNotice"></small><br>
@@ -38,12 +35,13 @@
 				<h5>비밀번호 확인</h5>
 				<input type="password" name="pwChk" id="pwChk" placeholder="비밀번호를 입력하세요"/><br />
 				<small id="pwChkNotice"></small><br>
-				<h3>선택항목</h3>
+				<h4>선택항목</h4>
+				<h5>이메일</h5>
+				<input type="email" name="email" placeholder="선택항목 : 이메일을 입력하세요(ex.abcd@aaa.com)"/><br />
+				<small>※이메일을 입력하지 않을 시, 아이디나 비밀번호 찾기가 불가능합니다</small><br>
 				<h5>생년월일</h5>
 				<input class="input-birth" type="text" name="birth" id="birth" placeholder="ex.19990101"/><br>
 				<small id = "birthNotice"></small><br>
-				<h5>이메일</h5>
-				<input type="email" name="email" placeholder="선택항목 : 이메일을 입력하세요(ex.abcd@aaa.com)"/><br />
 				<h5>폰번호</h5>
 				<input type="text" name="phone" placeholder="선택항목 : -를 제외한 번호만 입력해주세요(ex.01012345678)"/><br />
 				<button type="submit" name="button">가입하기</button>

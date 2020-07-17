@@ -16,7 +16,7 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 
-<title></title>
+<title>${user.id }님의 게시글</title>
 </head>
 <body>
 	<div class="allcontainer">
@@ -63,6 +63,11 @@
 								</a>
 							</div>
 							<div class='board-regdate'>${list.regdate}</div>
+							<c:if test="${sessionID eq list.member.id }">
+								<div class="board-dropdown">
+									<i class="fas fa-angle-down fa-2x"></i>
+								</div>
+							</c:if>
 						</div>	
 					</div>
 					</c:forEach>
@@ -79,6 +84,18 @@
 			<div class="modal-list liker">
 		
 			</div>
+		</div>
+	</div>
+	<div id="board-modal">
+		<ul>
+			<li></li>
+			<li><i class="fas fa-trash-alt"></i><span id="board-delete">삭제</span></li>
+			<li><span>기능</span></li>
+		</ul>
+	</div>
+
+	<div id ="board-popup" class="modal">
+		<div class="modal-context">
 		</div>
 	</div>
 	

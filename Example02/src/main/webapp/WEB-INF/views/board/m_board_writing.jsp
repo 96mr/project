@@ -12,11 +12,13 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="//code.jquery.com/jquery-3.2.1.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 
-<title></title>
+<title>${user.id }님의 게시글</title>
 </head>
 <body>
 	<div class="allcontainer">
@@ -67,6 +69,11 @@
 									</a>
 								</div>
 								<span class='board-regdate'>${list.regdate}</span>
+								<c:if test="${sessionID eq list.member.id }">
+									<div class="board-dropdown">
+										<i class="fas fa-angle-down fa-2x"></i>
+									</div>
+								</c:if>
 							</div>	
 						</div>
 					</c:forEach>
@@ -85,6 +92,20 @@
 			</div>
 		</div>
 	</div>
+	
+	<div id="board-modal">
+		<ul>
+			<li></li>
+			<li><i class="fas fa-trash-alt"></i><span id="board-delete">삭제</span></li>
+			<li><span>기능</span></li>
+		</ul>
+	</div>
+
+	<div id ="board-popup" class="modal">
+		<div class="modal-context">
+		</div>
+	</div>
+	
 	<script type="text/javascript" charset="utf-8">
         var contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
 		var loginID = "<c:out value='${sessionID}'/>";

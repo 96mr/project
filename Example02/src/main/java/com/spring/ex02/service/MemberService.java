@@ -1,5 +1,7 @@
 package com.spring.ex02.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex02.vo.MemberVO;
@@ -13,4 +15,6 @@ public interface MemberService {
 	public int updateProfile(ProfileVO profile, MultipartFile[] file) throws Exception; //프로필업데이트
 	public int updateMember(MemberVO member, String user) throws Exception;
 	public int updatePassword(String id, String pw, String new_pw) throws Exception;
+	public List<String> idFindByEmail(String email) throws Exception;
+	public int sendRandomPW(String how, String where, String who)throws Exception;
 }

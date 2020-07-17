@@ -1,5 +1,6 @@
 package com.spring.ex02.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -67,14 +68,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Map<String, Object> memberProfile(String profile_id, String id, int tab, int curPage) throws Exception {
 		Map<String, Object> result = new HashMap<String,Object>(); 	// 리턴할 결과 map
-		List<BoardVO> list = null;	//게시글 리스트
-		int user_no;				//프로필 회원 번호
+		List<BoardVO> list = new ArrayList<BoardVO>();	//게시글 리스트
+		int user_no = 0;				//프로필 회원 번호
 		
 		MemberVO vo = memberDao.selectById(profile_id);	
-		if(vo == null) {
-			user_no = 0;
-			list = null;
-		}else {
+		if(vo != null) {
 			user_no = vo.getUser_no();		//해당 프로필의 회원 번호
 			
 			//로그인 여부
@@ -99,7 +97,7 @@ public class BoardServiceImpl implements BoardService {
 						b.setIslike(1);
 				}
 			}	
-		}	
+		}
 		result.put("user", memberDao.ProfileList(user_no));
 		result.put("board", list);
 		result.put("board_cnt", boardDao.boardCount(user_no));
@@ -108,31 +106,37 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public List<BoardVO> timelineList(String id, int page) throws Exception {
+		List<BoardVO> result = new ArrayList<BoardVO>();
 		MemberVO vo = memberDao.selectById(id);
-		if(vo == null) {
-			return null;
-		} 
-		int user_no = vo.getUser_no();
-		List<BoardVO> list = boardDao.timeLineList(user_no, page);
-		for(int i = 0 ; i < list.size();i++) {
-			BoardVO b = list.get(i);
-			b.setIslike(likeDao.isLike(new LikeVO(b.getBno(), user_no))); //좋아요 했는가?
+		if(vo != null) {
+			int user_no = vo.getUser_no();
+			result = boardDao.timeLineList(user_no, page);
+			for(int i = 0 ; i < result.size();i++) {
+				BoardVO b = result.get(i);
+				b.setIslike(likeDao.isLike(new LikeVO(b.getBno(), user_no))); //좋아요 했는가?
+			}
 		}
-		return list;
+		return result;
 	}
 
 	@Override
-	public BoardVO boardDetail(int bno, String id) throws Exception {
-		BoardVO b = boardDao.boardDetail(bno);
-		if(b == null) {
-			return null;
+	public BoardVO boardDetail(int bno, String id, String user_id) throws Exception {
+		BoardVO result = new BoardVO(); 
+		MemberVO writer = memberDao.selectById(id); //입력받은 게시글 작성자 (잘못된 값인지 확인하기 위해)
+		
+		if(writer != null) {
+			result = boardDao.boardDetail(bno);
+			if(result == null || result.getWriter_id() != writer.getUser_no()) {
+				return null;
+			}
+			
+			if(id != null) {
+				MemberVO vo = memberDao.selectById(id);
+				int login_no = vo.getUser_no();
+				result.setIslike(likeDao.isLike(new LikeVO(bno, login_no)));
+			}
 		}
-		if(id != null) {
-			MemberVO vo = memberDao.selectById(id);
-			int login_no = vo.getUser_no();
-			b.setIslike(likeDao.isLike(new LikeVO(bno, login_no)));
-		}
-		return b;
+		return result;
 	}
 
 	@Override
@@ -164,16 +168,34 @@ public class BoardServiceImpl implements BoardService {
 		return list;
 	}
 
+	
 	@Override
-	public List<NoticeVO> alarmList(String id) throws Exception {
-		MemberVO vo = memberDao.selectById(id);
-		if(vo == null) {
-			return null;
+	@Transactional
+	public int deleteBoard(int bno, String login_id) throws Exception {
+		MemberVO user = memberDao.selectById(login_id);
+		BoardVO board = boardDao.boardDetail(bno);
+		if(user == null || board == null) {
+			return -1;
 		}
 		
-		int user_no = vo.getUser_no();
-		noticeDao.chkNotice(user_no);
-		return noticeDao.noticeList(user_no);
+		if(board.getWriter_id() == user.getUser_no()) {
+			boardDao.deleteBoard(bno);
+			return bno; 
+		}
+		return 0;
+	}
+
+	@Override
+	@Transactional
+	public List<NoticeVO> alarmList(String id) throws Exception {
+		List<NoticeVO> result = new ArrayList<NoticeVO>();
+		MemberVO vo = memberDao.selectById(id);
+		if(vo != null) {
+			int user_no = vo.getUser_no();
+			noticeDao.chkNotice(user_no);
+			result = noticeDao.noticeList(user_no);
+		}
+		return result;
 	}
 
 	

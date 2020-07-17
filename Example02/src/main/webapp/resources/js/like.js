@@ -10,11 +10,7 @@ function getLoginID(){
 function getUserID(){
 	return userID;
 }
-/*게시글 드롭다운*/
-$('.board-dropdown').click(function(){
-	event.stopPropagation();
-	$(this).find('ul').css('display','block');
-});
+
 /*modal창 닫기*/
 $('.close').click(function(){
     $(this).parents('.modal').css('display','none');

@@ -16,4 +16,5 @@ public interface BoardMapper {
 	public int boardCount(int id) throws Exception;
 	public List<BoardVO> likeList(int id, int page) throws Exception;
 	public List<BoardVO> searchList(Map<String, Object> map) throws Exception;
+	public void deleteBoard(int bno) throws Exception;
 }

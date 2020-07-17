@@ -1,5 +1,6 @@
 package com.spring.ex02.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +40,13 @@ public class FollowServiceImpl implements FollowService {
 	
 	@Override
 	public List<FollowVO> followerById(String id) throws Exception{		//팔로워 목록
+		List<FollowVO> result = new ArrayList<FollowVO>();
 		MemberVO vo = memberdao.selectById(id);
-		if(vo == null) {
-			return null;
+		if(vo != null) {
+			int user_no = vo.getUser_no();
+			result = followdao.follower(user_no);
 		}
-		int user_no = vo.getUser_no();
-		return followdao.follower(user_no);
+		return result;
 	}
 	
 	

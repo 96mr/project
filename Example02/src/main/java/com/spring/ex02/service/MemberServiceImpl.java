@@ -1,16 +1,20 @@
 package com.spring.ex02.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex02.common.FileUtils;
+import com.spring.ex02.common.MailHandler;
+import com.spring.ex02.common.Tempkey;
 import com.spring.ex02.dao.MemberDao;
 import com.spring.ex02.vo.FileVO;
 import com.spring.ex02.vo.MemberVO;
@@ -23,6 +27,9 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Inject
 	BCryptPasswordEncoder passwordEncoder;
+	
+	@Inject
+	private JavaMailSender mailSender;
 	
 	@Resource(name="fileUtils")
 	private FileUtils fileutils;
@@ -69,14 +76,21 @@ public class MemberServiceImpl implements MemberService {
 	//id로 회원정보
 	@Override
 	public MemberVO selectById(String id) throws Exception{
-		return dao.selectById(id);
+		MemberVO result = new MemberVO();
+		result = dao.selectById(id);
+		return result;
 	}
 	
 	@Override
 	@Transactional
 	public ProfileVO selectProfile(String id) throws Exception {
-		int no = dao.selectById(id).getUser_no();
-		return dao.selectProfile(no);
+		ProfileVO result = new ProfileVO();
+		MemberVO member = dao.selectById(id);
+		if(member!= null) {
+			int no = member.getUser_no();
+			result =  dao.selectProfile(no);
+		}
+		return result;
 	}
 	//
 	@Override
@@ -103,7 +117,7 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public int updateMember(MemberVO member, String user) throws Exception {
 		MemberVO vo = dao.selectById(user);
-		if(member.getPassword().equals(vo.getPassword())) {
+		if(passwordEncoder.matches(member.getPassword(), vo.getPassword())) {
 			member.setUser_no(vo.getUser_no());
 			dao.updateMember(member);
 			return 1;
@@ -127,6 +141,51 @@ public class MemberServiceImpl implements MemberService {
 			return 0; // 현재 비밀번호가 일치하지 않음
 		}
 	}
+
+	@Override
+	public List<String> idFindByEmail(String email) throws Exception {
+		List<String> result = new ArrayList<String>();
+		int index = 0;
+		for(String id:dao.searchByEmail(email)){
+			char[] str = id.toCharArray();
+			for(int i = 3 ; i < str.length;i++) {
+				str[i] = '*';
+			}
+			result.add(index, new String(str));	
+			index++;
+		}
+	
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public int sendRandomPW(String how, String where, String who) throws Exception {
+		if(who == null) {
+			return 0;
+		}
+		if(how.equals("email")) {
+			MemberVO user = dao.selectById(who);
+			String key = new Tempkey().getKey(10,false);
+			user.setPassword(passwordEncoder.encode(key));
+			dao.updatePassword(user);
+			MailHandler sendMail = new MailHandler(mailSender);
+			sendMail.setSubject("test)임시비밀번호가 발급되었습니다");
+			sendMail.setText(new StringBuffer().append("<h1>[회원님의 임시 비밀번호입니다]</h1>")
+					.append("<p>임시 발급된 비밀번호는 <b>")
+					.append(key)
+					.append("</b> 입니다. 임시비밀번호로 로그인하여 비밀번호를 변경해주시기 바랍니다. </p>").toString());
+			sendMail.setFrom("exmerang@gmail.com", "me rang");
+			sendMail.setTo(where);
+			sendMail.send();
+			
+			return 1;
+		}else if(how.equals("phone")){
+			return 1;
+		}
+		return 0;
+	}
+	
 	
 	
 }

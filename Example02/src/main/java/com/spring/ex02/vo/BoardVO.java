@@ -8,6 +8,7 @@ public class BoardVO {
 	private int writer_id; //fk : member의 user_id
 	private String regdate;
 	private int hit;
+	private String del_chk;
 	private List<FileVO> files;
 	private MemberVO member;
 	private List<ReplyVO> reply;
@@ -50,6 +51,12 @@ public class BoardVO {
 	public void setHit(int hit) {
 		this.hit = hit;
 	}
+	public String getDel_chk() {
+		return del_chk;
+	}
+	public void setDel_chk(String del_chk) {
+		this.del_chk = del_chk;
+	}
 	public List<FileVO> getFiles() {
 		return files;
 	}
@@ -74,5 +81,4 @@ public class BoardVO {
 	public void setIslike(int islike) {
 		this.islike = islike;
 	}
-	
 }

@@ -102,4 +102,10 @@
 		set org_name = #{org_name}, save_name = #{save_name}, f_size = #{f_size}
 		where fno = #{fno}
 	</update>
+	
+	<!-- 회원찾기 -->
+	<select id="searchByEmail" resultType ="String">
+		select id from member where email = #{email}
+	</select>
+	
 </mapper>

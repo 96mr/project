@@ -1,5 +1,7 @@
 package com.spring.ex02.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
@@ -64,5 +66,8 @@ public class MemberDaoImpl implements MemberDao{
 	public void updatePassword(MemberVO member) throws Exception {
 		sqlSession.update(namespace+".updatePassword", member);
 	}
-	
+	@Override
+	public List<String> searchByEmail(String email) throws Exception {
+		return sqlSession.selectList(namespace+".searchByEmail", email);
+	}
 }

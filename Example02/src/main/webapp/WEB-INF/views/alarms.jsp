@@ -35,7 +35,7 @@
 				</c:if>
 				<c:forEach var="list" items="${alarm_list}">
 					<div class="board">
-						<div onclick="location.href ='${pageContext.request.contextPath}/${list.member.id}/${list.bno}'">
+						<div>
 							<!--글 하나씩-->
 							<div>
 								<a href="${pageContext.request.contextPath}/${list.member.id}/profile">
@@ -51,7 +51,11 @@
 										<span class="alarm-content">님이 <a href="${pageContext.request.contextPath}/${sessionID}/${list.bno}"><b>내 글</b></a>을 좋아합니다</span>
 									</c:when>
 									<c:otherwise>
-										<span class="alarm-content">님이 댓글을 남겼습니다<br><a href="">${list.content }</a></span>
+										<span class="alarm-content">님이 댓글을 남겼습니다<br>
+											<a href="${pageContext.request.contextPath}/${sessionID}/${list.bno}">
+												${list.content }								
+											</a>
+										</span>
 									</c:otherwise>
 								</c:choose>
 							</div>

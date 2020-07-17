@@ -186,9 +186,9 @@
 	</select>
 	
 	<!-- 게시글 삭제 -->
-	<update id="boardDelete">
+	<update id="deleteBoard">
 	<![CDATA[
-	update board set del_chk = 'Y' where bno = #{bno}
+		update board set del_chk = 'Y' where bno = #{bno}
 	]]>
 	</update>
 </mapper>

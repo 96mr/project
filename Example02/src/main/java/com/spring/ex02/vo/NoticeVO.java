@@ -12,6 +12,7 @@ public class NoticeVO {
 	private String noteurl;
 	private Date regdate;
 	private Date chkdate;
+	private String del_chk;
 	private MemberVO member;
 	
 	public NoticeVO() {
@@ -82,6 +83,14 @@ public class NoticeVO {
 	}
 	public void setChkdate(Date chkdate) {
 		this.chkdate = chkdate;
+	}
+
+	public String getDel_chk() {
+		return del_chk;
+	}
+
+	public void setDel_chk(String del_chk) {
+		this.del_chk = del_chk;
 	}
 
 	public MemberVO getMember() {

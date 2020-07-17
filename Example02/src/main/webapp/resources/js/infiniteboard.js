@@ -80,8 +80,7 @@ function infiniteBoard(last_bno, url){
 							+ "<span class='comment-cnt'>"+value.reply.length+"</span></a></div><span class='board-regdate'>"+value.regdate+"</span>";
 						
 						if(loginID === value.member.id){
-							str += "<div class='board-dropdown'><i class='fas fa-angle-down fa-2x'></i>"
-								+"<ul><li><a><i class='fas fa-trash-alt'></i>삭제</a></li><li><a>취소</a></li></ul></div>";
+							str += "<div class='board-dropdown'><i class='fas fa-angle-down fa-2x'></i></div>";
 						}
 					str +="</div></div>";
 					

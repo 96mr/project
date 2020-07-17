@@ -10,7 +10,7 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 
-<title>홈</title>
+<title>글 작성하기</title>
 </head>
 <body>
 	<div class="allcontainer">
@@ -58,6 +58,7 @@
 			data:formData,
 			processData: false, 
 			contentType: false,
+			cache:false,
 			success:function(data){
 				window.location.href = contextPath+data;
 			}

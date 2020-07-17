@@ -16,11 +16,11 @@ $(document).ready(function(){
 
 /*게시글 드롭다운*/
 $(document).on("click",'.board-dropdown',function(){
-	$(this).find('ul').css('display','block');
+	
 	event.stopPropagation();
 });
 /*modal창 닫기*/
-$('.close').click(function(){
+$(document).on("click",'.close',function(){
     $(this).parents('.modal').css('display','none');
 });
 
@@ -57,3 +57,46 @@ function swiperLoad(){
 	});
 }
 
+$(document).on("click",function(e){
+	if(!($('.board-dropdown').has(e.target).length)){
+		$('#board-modal').css('display','none');
+	}
+});
+
+$(document).on("click",'.board-dropdown',function(e){
+	var select_bno = $(this).parents('.board').attr('data-bno');
+	$('#board-modal ul li:first').text(select_bno);
+	$("#board-modal").css({
+		"top":e.pageY-40 , 
+		"left":e.pageX+40,
+		"position": "absolute"
+	}).show();
+});
+
+$('#board-delete').on("click",function(e){
+	var bno = $(this).parents('ul').find('li:first').text();
+	var str= "<div class='modal-content'><div>정말로 삭제하실건가요?</div><ul><li onclick='delete_board("+bno+")'>삭제</li><li class='close'>취소</li></ul></div>";
+	console.log(bno);
+	console.log(str);
+	$('#board-popup .modal-context').html(str);
+	$('#board-popup').css("display","block");
+});
+
+function delete_board(board){
+	$.ajax({
+		url:contextPath+"/board/delete",
+		type:'post',
+		data: {bno:board},
+		success: function(data){
+			$('#board-popup').css("display","none");
+			if(data > 0){
+				alert('글이 삭제되었습니다!');
+				$('[data-bno = '+data+']').remove();
+			}
+			console.log(data);
+		},
+		error:function(request,status,error){
+			   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
+	});
+}

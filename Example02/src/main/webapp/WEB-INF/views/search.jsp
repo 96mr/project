@@ -63,15 +63,16 @@
 						<div class="board-bottom">
 							<div class="board-icon">
 								<span onclick="likeButton(${list.bno})" style="color: red;"> 
-									<span class="unlike <c:if test='${list.islike == 0 }'>active</c:if>"><i class='far fa-heart fa-2x'></i></span> 
-									<span class="like <c:if test='${list.islike == 1 }'>active</c:if>"><i class='fas fa-heart fa-2x'></i></span>
+									<span class="unlike <c:if test='${list.islike == 0 }'>active</c:if>"><i class='far fa-heart'></i></span> 
+									<span class="like <c:if test='${list.islike == 1 }'>active</c:if>"><i class='fas fa-heart'></i></span>
+								
 								</span>
 								<span class="like-cnt" onclick="liker_list(${list.bno})">${fn:length(list.liker_list)}</span>
 							</div>
 							<div class="board-icon">
 								<a href="${pageContext.request.contextPath}/${list.member.id}/${list.bno}">
-								<span><i class="far fa-comment-alt fa-2x"></i> </span>
-								<span>${fn:length(list.reply)}</span>
+									<span><i class="far fa-comment-alt"></i></span>
+									<span class="comment-cnt">${fn:length(list.reply)}</span>
 								</a>
 							</div>
 							<span class='board-regdate'>${list.regdate}</span>

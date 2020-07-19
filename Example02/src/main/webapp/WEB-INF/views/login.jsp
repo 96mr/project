@@ -27,7 +27,7 @@
 				<button type="submit" >로그인</button>
 			</form>
 			<p>
-				<a href="${pageContext.request.contextPath}/find/id">아이디찾기</a>|<a href="${pageContext.request.contextPath}/find/password">비밀번호찾기</a> <a href="${pageContext.request.contextPath}/join">회원가입</a>
+				<a href="${pageContext.request.contextPath}/find/id">아이디찾기</a> | <a href="${pageContext.request.contextPath}/find/password">비밀번호찾기</a><br> <a href="${pageContext.request.contextPath}/join">hoxy 회원이 아니십니까?</a>
 			</p>
 		</section>
 	</div>

@@ -35,7 +35,7 @@
 					</div>
 				</div>
 				<div style="color:gray">
-					<input type="radio" id="user_email" name="how_find_id" value="user_phone" disabled><label for="user_phone">가입한 핸드폰 번호로 찾기</label>
+					<input type="radio" id="user_email" name="how_find_id" value="user_phone" disabled><label for="user_phone">가입한 핸드폰으로 찾기</label>
 				</div>
 			</div>
 		</section>

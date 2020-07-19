@@ -40,9 +40,9 @@
 					<div style="padding:2% 5%; font-size:110%;border-bottom:1px solid black"><a href="${pageContext.request.contextPath}/settings/password">
 						<span style="padding-right:80%;"><span>비밀번호 변경</span></span><i class="fa fa-angle-right" aria-hidden="true"></i></a>
 					</div>
-					<div style="padding:2% 5%; font-size:110%;border-bottom:1px solid black"><a href="${pageContext.request.contextPath}/">
+					<%-- <div style="padding:2% 5%; font-size:110%;border-bottom:1px solid black"><a href="${pageContext.request.contextPath}/">
 						<span style="padding-right:80%;"><span>공개범위</span></span><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-					</div>
+					</div> --%>
 				</div>
 			</div>
 

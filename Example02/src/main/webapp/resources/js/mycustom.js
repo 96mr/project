@@ -76,8 +76,7 @@ $(document).on("click",'.board-dropdown',function(e){
 $('#board-delete').on("click",function(e){
 	var bno = $(this).parents('ul').find('li:first').text();
 	var str= "<div class='modal-content'><div>정말로 삭제하실건가요?</div><ul><li onclick='delete_board("+bno+")'>삭제</li><li class='close'>취소</li></ul></div>";
-	console.log(bno);
-	console.log(str);
+
 	$('#board-popup .modal-context').html(str);
 	$('#board-popup').css("display","block");
 });
@@ -93,7 +92,6 @@ function delete_board(board){
 				alert('글이 삭제되었습니다!');
 				$('[data-bno = '+data+']').remove();
 			}
-			console.log(data);
 		},
 		error:function(request,status,error){
 			   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

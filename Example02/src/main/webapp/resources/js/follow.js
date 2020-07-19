@@ -133,13 +133,15 @@ function follower_list(){
 /*팔로우 중인가?*/
 function isFollow(str){
 	var result = 0;
+	console.log(str);
 	$.ajax({
 	    url: contextPath+"/isFollow", 
 	    data: { id: str },                
 	    type: "POST",
 	    async: false,                                      
 		success: function(data){
-			if(data == 1){			
+			if(data == 1){
+				$(this).addClass('active');
 				result = data;
 			}
 		}

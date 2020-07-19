@@ -238,8 +238,9 @@ public class BoardController {
 			return "redirect:/browse";
 		}
 		String user_id = (String) session.getAttribute("sessionID");
-		List<NoticeVO> vo = boardService.alarmList(user_id);	//회원+팔로우 게시글
-		model.addAttribute("alarm_list", vo);
+		Map<String,Object> map = boardService.alarmList(user_id);	//회원+팔로우 게시글
+		model.addAttribute("alarm_list", map.get("result"));
+		model.addAttribute("new_notice_cnt", map.get("new_notice_cnt"));
 		return "alarms";
 	}
 	

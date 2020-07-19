@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex02.common.FileUtils;
 import com.spring.ex02.dao.BoardDao;
+import com.spring.ex02.dao.FollowDao;
 import com.spring.ex02.dao.LikeDao;
 import com.spring.ex02.dao.MemberDao;
 import com.spring.ex02.dao.NoticeDao;
@@ -187,13 +188,17 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	@Transactional
-	public List<NoticeVO> alarmList(String id) throws Exception {
-		List<NoticeVO> result = new ArrayList<NoticeVO>();
+	public Map<String,Object> alarmList(String id) throws Exception {
+		Map<String,Object> result = new HashMap<String,Object>();
 		MemberVO vo = memberDao.selectById(id);
 		if(vo != null) {
 			int user_no = vo.getUser_no();
+			List<NoticeVO> list = noticeDao.noticeList(user_no);
+			int num = noticeDao.newNotice(user_no);
 			noticeDao.chkNotice(user_no);
-			result = noticeDao.noticeList(user_no);
+
+			result.put("result",list);
+			result.put("new_notice_cnt", num);
 		}
 		return result;
 	}

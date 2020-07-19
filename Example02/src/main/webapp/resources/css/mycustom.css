@@ -21,13 +21,13 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 
 /*댓글 부분*/
 .board_comment{border-bottom:#D8EDE0 1px solid; margin:.auto; padding:1em; cursor:pointer;}
-.comment .comment-txt{display:inline-block;width:55%; font-size:90%; margin:2%; word-break:break-all;}
-.comment .comment-date{display:inline-block; width:15%; font-size:80%}
+.comment .comment-txt{display:inline-block;width:45%; font-size:90%; margin:2%; word-break:break-all;}
+.comment .comment-date{display:inline-block; width:20%; font-size:70%}
 .comment .member-profile{width:20%;}
 .comment-list:hover, .comment-re:hover{background-color:#F4F7F5}
-.comment .member-name{display:inline-block;font-weight:bold; color:black; font-size:90%; margin:2%; height:50px;}
+.comment .member-name{display:inline-block;font-weight:bold; color:black;width:15%; font-size:85%; margin:2%; height:50px;}
 .comment .member-name a:hover{text-decoration:underline;}
-.comment .member-id{display:inline-block;color:gray; font-size:90%;}
+.comment .member-id{display:inline-block;color:gray; font-size:90%; width:15%;}
 .comment .member-image{display:inline-block;
               background-color:white;
               border:lightgray 1px solid;
@@ -38,7 +38,7 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
               width:5%; height:0; padding-bottom:5%;}
 .comment .member-image img{width:100%;}
 .comment-list{width:100%;}
-.comment-re {width:100%;padding-left:8%;}
+.comment-re {width:100%;padding-left:5%;}
 .comment-re-list{}
 .add-comment{text-align:center; padding:2% 1% 1% 1%;}
 .add-comment textarea{vertical-align:middle;width:80%;border:lightgray 1px solid; padding:1%; margin:1%; border-radius: 5px;resize: none;}
@@ -95,6 +95,7 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 .board-icon{cursor:pointer; display:inline-block; font-size:110%;font-weight:bold; width:15%;margin:1%;}
 .board-regdate{color:#626262; font-size:90%; margin:auto 5%; min-width:30%;}
 
+
 /*미디어 타임라인 부분*/
 .media-timeline .board{display: inline-block; border:#D8EDE0 1px solid; width:31%;
                       border-radius:15px; margin:0.2em; padding:0.1em;}
@@ -112,14 +113,37 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 .media-timeline .board-image-list img{width:150%;}
 .media-timeline .board a{text-decoration: none; color:black;}
 
+
+/* 알람 */
+.alarmlist .board-empty{height:30%; text-align:center; font-weight:bold; padding:5%}
+.alarmlist .board{border-bottom:#D8EDE0 1px solid; margin:.auto; padding:1em; cursor:pointer;}
+.alarmlist .board a{color:black}
+.alarmlist .board a:hover{text-decoration:none}
+.alarmlist .board:hover{background-color:#F4F7F5}
+.alarmlist .board-member-name{font-weight:bold; font-size:110%; height:50px;}
+.alarmlist .board-member-image{display:inline-block;
+              background-color:white;
+              margin:1%;
+              border:lightgray 1px solid;
+              border-radius:25px;
+              overflow:hidden;
+              align-items: center;
+              justify-content: center;
+              width:7%; height:0; padding-bottom:7%;
+            }
+.alarmlist .board-member-image img{width:100%;}
 .alarm-content{width:80%; padding:2%}
+.alarm_chk_text{font-weight:bold; font-size:105%; margin:2%; padding:2%}
+.alarm-content-reply{margin:2%; padding:3%; border:1px solid lightgray; border-radius:10px;background-color:white}
+.alarmlist .board .follow-btn, .follow-btn.active {border-radius:10px; width:18%; margin-left:5%; display:inline-block; font-weight:bold; font-size:90%;text-align:center; cursor:pointer; padding:.5% .5%;}
 
 
 /*로그인, 회원가입 폼 부분*/
 .content-login{width:70%; min-height: 100vh; margin:auto; text-align: center; padding:1em;}
 .content-login h5{width:17%;margin:0.1em; display:inline-block}
 .content-login input{width:65%; padding:1em; margin:1em; border:lightgray 1px solid; border-radius: 5px;}
-.content-login button{width:20%; font-weight:bold; padding:1em; margin:1em; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 5px;}
+.content-login button{width:20%; font-weight:bold; padding:1em; margin:1em; background-color:#a863e0; color:white;border:#a863e0 1px solid; border-radius: 5px;}
+.content-login p a{color:#b175e3}
 
 /*회원정보 수정 부분*/
 .setting-form{width:70%; min-height: 100vh; margin:auto; text-align: center; padding:1em;}
@@ -127,7 +151,7 @@ nav{width:20%; display:inline-block; position:fixed; left:10%; vertical-align: t
 .setting-form input{width:66%; padding:3%; margin:3% 1%; border:lightgray 1px solid; border-radius: 5px;}
 .setting-form button{width:25%; font-weight:bold; padding:1em; margin:1em; color:white; background-color:#a863e0;border:#a863e0 1px solid; border-radius: 5px;}
 
-.user-find{width:70%; min-height: 100vh; margin:auto;padding:1em;}
+.user-find{width:70%; min-height: 100vh;text-align:center; margin:auto;padding:1em;}
 .user-find-header{width:90%; margin:2% auto 5% auto; text-align:center; }
 .user-find h5{width:17%;margin:0.1em; display:inline-block}
 .user-find input:not([type="radio"]){width:50%; padding:1em; margin:1em; border:lightgray 1px solid; border-radius: 5px;}

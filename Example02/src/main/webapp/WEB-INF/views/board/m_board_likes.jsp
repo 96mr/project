@@ -47,7 +47,7 @@
 									<a href="${pageContext.request.contextPath}/${list.member.id}/profile">
 										<span class="board-member-image"><img src="${pageContext.request.contextPath }/resources/images/${list.member.profile.image_file.save_name}" /></span> 
 										<span class="board-member-name">${list.member.profile.name }</span> 
-										<span class="board-member-id">@ ${list.member.id }</span>
+										<span class="board-member-id">${list.member.id }</span>
 									</a>
 									<c:if test="${not empty list.files }">
 										<c:forEach var="files" items="${list.files }">

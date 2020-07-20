@@ -8,7 +8,6 @@ $(document).ready(function (){
 
 function send_alarms(id) {
     var wsUri = "ws://localhost:8080/echo";
-    console.log(id);
     websocket = new WebSocket(wsUri);
 
     websocket.onopen = function(evt) {
@@ -25,13 +24,10 @@ function send_alarms(id) {
 }
 
 function onOpen(evt, id){
-	console.log("open:"+evt.data);
-	console.log(id);
     websocket.send(id);
 }
 
 function onMessage(evt) {
-	console.log("message:"+evt.data);
     $('#alarm-count').html(evt.data);
 }
 

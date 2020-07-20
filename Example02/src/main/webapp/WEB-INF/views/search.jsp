@@ -10,10 +10,11 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="//code.jquery.com/jquery-3.2.1.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
-
 <title>검색</title>
 </head>
 <body>
@@ -46,16 +47,23 @@
 								<a href="${pageContext.request.contextPath}/${list.member.id}/profile">
 									<span class="board-member-image"><img src="${pageContext.request.contextPath }/resources/images/${list.member.profile.image_file.save_name}" /></span>
 									<span class="board-member-name">${list.member.profile.name }</span>
-									<span class="board-member-id">@ ${list.member.id }</span>
+									<span class="board-member-id">${list.member.id }</span>
 								</a>
 								<c:if test="${not empty list.files }">
-									<c:forEach var="files" items="${list.files }">
-										<div class="board-image-list">
-											<span> 
-											<img src="${pageContext.request.contextPath }/resources/images/${files.save_name }" />
-											</span>
+									<div class="swiper-container">
+								    	<div class="swiper-wrapper">
+											<c:forEach var="files" items="${list.files }">
+												<div class="swiper-slide">
+													<div class="board-image-list">
+														<span> 
+														<img src="${pageContext.request.contextPath }/resources/images/${files.save_name }" />
+														</span>
+													</div>
+												</div>
+											</c:forEach>
 										</div>
-									</c:forEach>
+									  <div class="swiper-pagination"></div>
+									</div>
 								</c:if>
 								<div class="board-txt">${list.content }</div>
 							</div>

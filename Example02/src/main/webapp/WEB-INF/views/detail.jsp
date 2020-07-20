@@ -7,6 +7,8 @@
 <head>
 <link rel="stylesheet" href="/resources/css/mycustom.css" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="//code.jquery.com/jquery-3.2.1.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
@@ -44,7 +46,7 @@
 							<a href="${pageContext.request.contextPath}/${board.member.id}/profile">
 								<span class="board-member-image"><img src="${pageContext.request.contextPath }/resources/images/${board.member.profile.image_file.save_name}" /></span> 
 								<span class="board-member-name">${board.member.profile.name }</span> 
-								<span class="board-member-id">@ ${board.member.id }</span>
+								<span class="board-member-id">${board.member.id }</span>
 							</a>
 							<c:if test="${sessionID eq board.member.id }">
 								<div class="board-dropdown">

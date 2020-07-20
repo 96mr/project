@@ -53,7 +53,7 @@ function infiniteBoard(last_bno, url){
 								<span class='board-member-image'>
 								<img src='${contextPath}/resources/images/${value.member.profile.image_file.save_name}'/></span>
 								<span class='board-member-name'>${value.member.profile.name}</span>
-								<span class='board-member-id'>@${value.member.id}</span></a>`;
+								<span class='board-member-id'>${value.member.id}</span></a>`;
 						
 						if(value.files){
 							str +=`<div class='swiper-container'>

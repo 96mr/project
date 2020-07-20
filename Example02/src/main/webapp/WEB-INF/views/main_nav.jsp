@@ -9,7 +9,7 @@
         <li class="navitem"><a href="${pageContext.request.contextPath}/browse"><i class="fas fa-search"></i><span class="nav-text">검색</span></a></li>
         <c:choose>
     	    <c:when test="${empty sessionID}">
-      	  		<li class="navitem"><a href="${pageContext.request.contextPath}/login"><span class="nav-text">로그인</span></a></li>
+      	  		<li class="navitem"><a href="${pageContext.request.contextPath}/login"><i class="fas fa-sign-in-alt"></i><span class="nav-text">로그인</span></a></li>
       	  		<li class="navitem"><a href="${pageContext.request.contextPath}/join"><span class="nav-text">회원가입</span></a></li>
         	</c:when>
         	<c:otherwise>

@@ -6,14 +6,14 @@
 	<resultMap id="replyResult" type="com.spring.ex02.vo.ReplyVO" autoMapping="true">
 		<result property="repno" column="REPNO"/>
 		<result property="writer_id" column="WRITER_ID"/>
-		<association property="member" column="WRITER_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.ProfileList">
+		<association property="member" column="WRITER_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.selectProfileList">
 			<id property="user_no" column="USER_NO"/>
 		</association>
 	</resultMap>
 	
 	
 	<!-- 댓글 작성  -->
-	<insert id="addReply">
+	<insert id="insertReply">
 		insert into board_reply (repno, bno, content, writer_id, parent_id) 
 		values(reply_no_seq.nextval, #{bno}, #{content}, #{writer_id}, #{parent_id, jdbcType=NUMERIC})
 	</insert>
@@ -24,9 +24,18 @@
 		update board_reply set del_chk = 'Y' where repno = #{repno}
 	]]>
 	</update>
+	
+	<!-- 댓글 -->
+	<select id="selectReply" resultMap="replyResult">
+	<![CDATA[
+		select repno, bno, content, del_chk, regdate, writer_id, parent_id
+		from board_reply b
+		where repno = #{repno}
+	]]>
+	</select>
 
 	<!-- 댓글 리스트 -->
-	<select id = "replyList" resultMap="replyResult">
+	<select id = "selectReplyList" resultMap="replyResult">
 	<![CDATA[
 		select repno, bno, content, del_chk,
 			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 

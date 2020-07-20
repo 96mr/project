@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,8 +35,7 @@ public class MemberController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
-	@Resource(name="MemberService")
-	private MemberService service;
+	@Resource(name="MemberService") private MemberService service;
 	
 	@InitBinder
 	protected void initbinder(WebDataBinder binder) {
@@ -54,6 +52,7 @@ public class MemberController {
 	
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String join(@Valid @ModelAttribute("vo") MemberVO member, @RequestParam("pwChk") String pwChk, BindingResult result, HttpServletResponse response, RedirectAttributes rttr) throws Exception{
+		logger.info("join : " + member.toString());
 		if(result.hasErrors())
 			return "register";
 		
@@ -109,6 +108,7 @@ public class MemberController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST) //로그인 시도
 	public String login(@ModelAttribute("member") MemberVO member,HttpSession session, RedirectAttributes rttr) throws Exception {
+		logger.info("login: " + member.toString());
 		if((String)session.getAttribute("sessionID") != null) {
 			return "home";
 		}
@@ -153,6 +153,7 @@ public class MemberController {
 	@RequestMapping(value = "/settings/account", method = RequestMethod.POST) 
 	public String edit_account(@Valid @ModelAttribute("vo") MemberVO member, BindingResult result, 
 									HttpSession session, RedirectAttributes rttr, Model model) throws Exception {
+		logger.info("edit account :"+ member.toString());
 		if(result.hasErrors()) {
 			return "settings/edit_account";
 		}
@@ -179,7 +180,7 @@ public class MemberController {
 	@RequestMapping(value = "/settings/password", method = RequestMethod.POST)
 	public String edit_password(@RequestParam("pw") String pw,@RequestParam("new_pw") String new_pw, @RequestParam("new_pwChk") String pwChk, 
 								HttpSession session, RedirectAttributes rttr) throws Exception {
-	
+		logger.info("edit password pw : "+ pw +", new_pw : "+ ", pwchk : " + pwChk);
 		String user = (String) session.getAttribute("sessionID");
 			
 		String pwReg = "^[a-z0-9]{8,30}$";
@@ -207,10 +208,11 @@ public class MemberController {
 	
 	@RequestMapping(value = "/find/id", method = RequestMethod.POST) 
 	public String find_id(@RequestParam(value="email",required=false) String email, Model model) throws Exception {
+		logger.info("find id post");
 		List<String> find_result = null;
 		find_result = service.idFindByEmail(email);
-		model.addAttribute("result_count", find_result.size());
-		model.addAttribute("result", find_result);
+		model.addAttribute("result_count", find_result.size())
+			 .addAttribute("result", find_result);
 		return "find_id_result";
 	}
 	
@@ -222,7 +224,7 @@ public class MemberController {
 	@RequestMapping(value = "/find/password", method = RequestMethod.POST) 
 	public String find_pw(@RequestParam(value="id",required=false) String id, 
 						  Model model) throws Exception {
-		
+		logger.info("find pw post");
 		MemberVO vo = service.selectById(id);
 		if(vo == null) {
 			model.addAttribute("send_failed", "존재하지 않는 아이디입니다!");
@@ -230,15 +232,16 @@ public class MemberController {
 		}
 		String to_email = vo.getEmail(); //해당 id의 이메일을 가져옴
 		String to_phone = vo.getPhone();
-		model.addAttribute("to_email", to_email);
-		model.addAttribute("to_phone", to_phone);
-		model.addAttribute("user_id", id);
+		model.addAttribute("to_email", to_email)
+			 .addAttribute("to_phone", to_phone)
+			 .addAttribute("user_id", id);
 		return "find_password_how";
 	}
 	
 	@RequestMapping(value = "/find/password/how", method = RequestMethod.POST) 
 	public String find_pw_how(@RequestParam("how") String how, @RequestParam("where") String where,
 							  @RequestParam("user_id") String who,Model model) throws Exception {
+		logger.info("find pw how :"+how +", where :"+ where +", who :"+ who);
 		int result = 0;
 		result = service.sendRandomPW(how, where, who); // 임시 비밀번호 전송
 		if(result == 1) {

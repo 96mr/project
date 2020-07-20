@@ -9,5 +9,5 @@ public interface LikeDao {
 	public void addLike(LikeVO vo) throws Exception;
 	public void deleteLike(LikeVO vo) throws Exception;
 	public int isLike(LikeVO vo) throws Exception;
-	public List<MemberVO> boardLike(int no) throws Exception;
+	public List<MemberVO> boardLiker(int no) throws Exception;
 }

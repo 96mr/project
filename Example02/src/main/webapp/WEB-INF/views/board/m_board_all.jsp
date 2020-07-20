@@ -23,6 +23,7 @@
 		 <%@ include file="/WEB-INF/views/main_nav.jsp" %>
 		<section class="content">
 			<%@ include file="/WEB-INF/views/member_profile.jsp" %>
+			<c:if test="${not empty user}">
 			<div class="profile-tab">
 				<ul>
 					<li class="tab-link current" data-tab="tab-1"><a href="${pageContext.request.contextPath}/${user.id}/profile">ALL</a></li>
@@ -35,7 +36,7 @@
 				<article class="timeline">
 					<c:if test="${empty board }">
 						<div class="board">
-							<div>아직 작성한 글이 없습니다</div>
+							<div>작성한 글이 없습니다</div>
 						</div>
 					</c:if>
 					<!--전체(타임라인식)-->
@@ -95,6 +96,7 @@
 					</c:forEach>
 				</article>
 			</div>
+			</c:if>
 		</section>
 	</div>
 	

@@ -27,9 +27,14 @@
 			</div>
 			<c:choose>
 			<c:when test="${empty board }">
+				<article class="timeline">
 					<div class="board">
-						<div>존재하지 않는 페이지입니다</div>
+						<!--글 상세-->
+						<div>
+							<div class="board-txt" style="text-align:center"><b>존재하지 않는 페이지입니다.</b></div>
+						</div>
 					</div>
+				</article>
 			</c:when>
 			<c:otherwise>
 				<article class="timeline">			
@@ -129,108 +134,13 @@
 	<script type="text/javascript" charset="utf-8">
         var contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
 		var loginID = "<c:out value='${sessionID}'/>";
-		var userID = "<c:out value='${user.id}'/>"
+		var userID = "<c:out value='${board.member.id}'/>";
+		var boardNO = "<c:out value='${board.bno}'/>"
 	</script>	
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/like.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/follow.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/mycustom.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/websocket.js"></script>
-	<script>
-	$(document).ready(function(){
-		commentList("<c:out value='${board.bno}'/>");
-  	});
-  	
-	function addComment(formName){
-		var board = "<c:out value='${board.bno}'/>";
-		console.log(formName);
-		$.ajax({
-			url:"${pageContext.request.contextPath}/comment/add",
-			type:'post',
-			cache : false,
-			data: $('#'+formName).serialize(),
-			success: function(data){
-				$('form').each(function() { this.reset(); });
-				commentList(board);
-			},
-			error:function(request,status,error){
-				   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			}
-		});
-	}
-
-	function deleteComment(rep_no){
-		var board = "<c:out value='${board.bno}' />"
-		console.log("삭제 번호"+rep_no);
-		$.ajax({
-			url:"${pageContext.request.contextPath}/comment/delete",
-			type:'post',
-			data: {rep_no : rep_no},
-			success: function(data){
-				commentList(board);
-			},
-			error:function(request,status,error){
-				   alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			}
-		});
-	}
-
-	function commentList(board){
-		var cmt = "";
-		var recmt = "";
-			$.ajax({
-				url: contextPath+"/comment/list",
-				type:'post',
-				cache : false,
-				data: {bno:board},
-				success: function(data){
-					if(data){	
-						var str = "";	
-						var comment_cnt = 0;	
-						$.each(data, function(index, value){
-							str = "<span class='member-profile'><a href='"+contextPath+"/"+ value.member.id +"/profile'><span class='member-image'>"
-									+"<img src='"+contextPath+"/resources/images/"+ value.member.profile.image_file.save_name +"' /></span>"
-									+"<span class='member-name'>"+value.member.profile.name+"<br>"
-									+"<span class='member-id'>@"+ value.member.id +"</span></span></a></span>"
-									+"<span class='comment-txt'>";
-									if(value.del_chk === 'N'){
-										str += value.content; 
-										comment_cnt++;
-									}else if(value.del_chk === 'Y'){
-										str += "삭제된 댓글입니다";
-									}
-									
-							str	+= "</span><span class='comment-date'>"+value.regdate+"</span>";
-									if(loginID === value.member.id && value.del_chk === 'N')
-										str +="<div><span class='comment-delete' onclick='javascript:deleteComment('value.delete_repno');'>삭제</span></div>";
-									
-							if(value.parent_id == 0){
-								cmt += "<div class='comment-list'>"+str+"</div>";
-								if(value.del_chk === 'N')
-									cmt +="<span class='re-comment'>답글달기</span><div class='re-comment-form'>"
-										+"<form id='recomment-form-"+value.repno+"' method='POST'>"
-										+"<input name='bno' value='"+value.bno+"' type='hidden' />"
-										+"<input name='parent_id' value='"+value.repno+"' type='hidden'/>"
-										+"<textarea name='content' rows='1' cols='50' placeholder='답글달기'></textarea>"
-										+"<button type='button' onclick='javascript:addComment('value.repno');' >작성</button></form></div>";
-							}
-							else{
-								cmt += "<div class='comment-re'><span>└</span>" + str +"</div>";								
-							}
-							cmt = cmt.replace(/'value.delete_repno'/gi, value.repno);
-							cmt = cmt.replace(/'value.repno'/gi, '"recomment-form-' + value.repno + '"');
-						});
-						$('.comment').html(cmt);
-						$('.comment-cnt').text(comment_cnt);
-					}
-				}
-			});
-		}
-
- 	$(document).on('click','.re-comment', function(){
- 	 	$('.re-comment-form').css('display','none');
- 		$(this).next().css('display','block');
- 	 });
-
-	</script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/comment.js"></script>
 </body>
 </html>

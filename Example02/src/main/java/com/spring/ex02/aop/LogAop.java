@@ -30,6 +30,5 @@ public class LogAop {
 	
 	@Before("within(com.spring.ex02.service.*)")
 	public void beforeMethod() {
-		log.info("beforeMethod()--------------------");
 	}
 }

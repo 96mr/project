@@ -7,21 +7,23 @@
 	<resultMap id="boardResult" type="com.spring.ex02.vo.BoardVO" autoMapping="true">
 		<result property="bno" column="BNO"/>
 		<result property="writer_id" column="WRITER_ID"/>
-		<association property="member" column="WRITER_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.ProfileList">
+		<association property="member" column="WRITER_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.selectProfileList">
 			<id property="user_no" column="USER_NO"/>
 		</association>
-		<collection property="files" column="BNO" javaType="java.util.ArrayList" ofType="FileVO" select="fileList"></collection>
-		<collection property="liker_list" column="BNO" javaType="java.util.ArrayList" ofType="LikeVO" select="com.spring.ex02.mapper.LikeMapper.boardLike"></collection>
-		<collection property="reply" column="BNO" javaType="java.util.ArrayList" ofType="ReplyVO" select="com.spring.ex02.mapper.ReplyMapper.replyList"></collection>
+		<collection property="files" column="BNO" javaType="java.util.ArrayList" ofType="FileVO" select="selectFileList"></collection>
+		<collection property="liker_list" column="BNO" javaType="java.util.ArrayList" ofType="LikeVO" select="com.spring.ex02.mapper.LikeMapper.selectBoardLiker"></collection>
+		<collection property="reply" column="BNO" javaType="java.util.ArrayList" ofType="ReplyVO" select="com.spring.ex02.mapper.ReplyMapper.selectReplyList"></collection>
 	</resultMap>
 	
 	<!-- 글 작성 -->
-	<insert id ="write">
+	<insert id ="insertBoard">
 		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
 			select board_no_seq.nextval FROM DUAL
 		</selectKey>
-		insert into board(bno, content, writer_id) 
-		values(#{bno}, #{content}, #{writer_id})
+		insert into 
+			board(bno, content, writer_id) 
+		values
+			(#{bno}, #{content}, #{writer_id})
 	</insert>
 	
 	<!-- 파일 첨부업로드 -->
@@ -29,16 +31,21 @@
 		<selectKey keyProperty="fno" resultType="int" order="BEFORE">
 			select FILE_NO_SEQ.nextval FROM DUAL
 		</selectKey>
-		insert into fileinfo(fno, org_name, save_name, f_size, reg_id)
-		values(#{fno}, #{org_name}, #{save_name}, #{f_size}, #{reg_id})
+		insert into 
+			fileinfo(fno, org_name, save_name, f_size, reg_id)
+		values
+			(#{fno}, #{org_name}, #{save_name}, #{f_size}, #{reg_id})
 	</insert>
 	
 	<insert id="insertBoardFile">
-		insert into board_file values(bf_no_seq.nextval, #{bno}, #{fno})
+		insert into 
+			board_file 
+		values
+			(bf_no_seq.nextval, #{bno}, #{fno})
 	</insert>
 	
 	<!-- 파일 읽어오기 -->
-	<select id="fileList" resultType="FileVO">
+	<select id="selectFileList" resultType="FileVO">
 		select f.fno, org_name, save_name, round(f_size/1024, 1) as f_size
 		from fileinfo f, board_file bf
 		where f.fno = bf.fno
@@ -48,28 +55,28 @@
 	<!-- 게시글 검색 -->
 	<select id="searchList" resultMap="boardResult">
 	<![CDATA[
-	select rnum, bno, content, writer_id,
-		case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
-             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
-         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
-    	end regdate 
-	from ( 
-    	select rownum as rnum, A.*
-  	  	from (
-			select *
-			from board
-			where del_chk = 'N'
-	 ]]>
-		<if test="keyword != null and keyword != '' ">
-			and ${search_option} like '%' || #{keyword} || '%'
-		</if>
-			order by bno desc) A
+		select rnum, bno, content, writer_id,
+			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
+	             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
+	         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
+	    	end regdate 
+		from ( 
+	    	select rownum as rnum, A.*
+	  	  	from (
+				select *
+				from board
+				where del_chk = 'N'
+	]]>
+			<if test="keyword != null and keyword != '' ">
+				and ${search_option} like '%' || #{keyword} || '%'
+			</if>
+				order by bno desc) A
 	<![CDATA[
 			where rownum <= (#{page}+1)*20) x
 		where rnum > #{page}*20
@@ -77,109 +84,109 @@
 	</select>
 	
 	<!-- 타임라인 게시글 리스트 읽어오기 -->
-	<select id="timeLineList" resultMap="boardResult">
+	<select id="searchTimeLineList" parameterType="java.util.Map" resultMap="boardResult">
 	<![CDATA[
-	select rnum, bno, content, writer_id,  
-		case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
-             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
-         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
-    	end regdate 
-	from ( 
-    	select rownum as rnum, A.*
-  	  	from (
-   	     	select *
-        	from (select * from board where del_chk = 'N') b
-        	where writer_id = #{id}
-        	or writer_id in (select t_id from follow where m_id = #{id})
-        	order by b.bno desc) A
-    	where rownum <= (#{page}+1)*20) x
-	where rnum > #{page}*20
+		select rnum, bno, content, writer_id,  
+			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
+	             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
+	         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
+	    	end regdate 
+		from ( 
+	    	select rownum as rnum, A.*
+	  	  	from (
+	   	     	select *
+	        	from (select * from board where del_chk = 'N') b
+	        	where writer_id = #{id}
+	        	or writer_id in (select t_id from follow where m_id = #{id})
+	        	order by b.bno desc) A
+	    	where rownum <= (#{page}+1)*20) x
+		where rnum > #{page}*20
 	]]>
 	</select>
 	
 	<!-- 멤버 게시글 리스트 -->
-	<select id="boardList" resultMap="boardResult">
+	<select id="searchBoardList" resultMap="boardResult">
 	<![CDATA[
-	select rnum, bno, content, writer_id,
-		case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
-             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
-         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
-    	end regdate 
-	from(select rownum as rnum, A.*
-		 from (
-			select * from board b
-			where writer_id = #{id}
-			and b.del_chk = 'N'		
+		select rnum, bno, content, writer_id,
+			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
+	             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
+	         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
+	    	end regdate 
+		from(select rownum as rnum, A.*
+			 from (
+				select * from board b
+				where writer_id = #{id}
+				and b.del_chk = 'N'		
 	]]>
-			<choose>
-				<when test='tab==1'>
-					and not exists (select f.bno from board_file f where f.bno = b.bno)
-				</when>
-				<when test='tab==2'>
-					and exists (select f.bno from board_file f where f.bno = b.bno)
-				</when>
-			</choose>
-			order by b.bno desc ) A
+		<choose>
+			<when test='tab==1'>
+				and not exists (select f.bno from board_file f where f.bno = b.bno)
+			</when>
+			<when test='tab==2'>
+				and exists (select f.bno from board_file f where f.bno = b.bno)
+			</when>
+		</choose>
+				order by b.bno desc ) A
 	<![CDATA[
-			 where rownum <= (#{page}+1)*20) x
+			where rownum <= (#{page}+1)*20) x
 		where rnum > #{page}*20
 	]]>
 	</select>
 	
 	
 	<!-- 좋아요 한 글 -->
-	<select id="likeList" resultMap="boardResult">
+	<select id="searchLikeList" resultMap="boardResult">
 	<![CDATA[
-	select rnum, bno, content, writer_id, 
-		case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
-             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
-         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
-            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
-         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
-    	end regdate 
-	from ( 
-	    select rownum as rnum, a.*
-	  	from (
-			select b.bno, b.content, b.writer_id, b.regdate as regdate, l.regdate as l_regdate
-			from board b, board_like l
-			where b.bno = l.bno
-			and like_id = #{id}
-			and b.del_chk = 'N'
-			order by l.regdate desc ) a
-		where rownum <= (#{page}+1)*20) x
-	where rnum > #{page}*20
+		select rnum, bno, content, writer_id, 
+			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
+	             	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS'))*24*60*60)))||'초전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi') < to_char(regdate + 1/24, 'yyyy/mm/dd hh24:mi') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI'))*24*60)))||'분전' 
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24') < to_char(regdate + 1, 'yyyy/mm/dd hh24') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD HH24'), 'YYYY-MM-DD HH24'))*24)))||'시간전'
+	         	 when TO_CHAR(SYSDATE ,'yyyy/mm/dd') < to_char(regdate + 7, 'yyyy/mm/dd') 
+	            	then to_char(TRUNC(((SYSDATE - TO_DATE(TO_CHAR(regdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')))))||'일전'
+	         	 else to_char(regdate, 'yyyy"년"MM"월"dd"일"')
+	    	end regdate 
+		from ( 
+		    select rownum as rnum, a.*
+		  	from (
+				select b.bno, b.content, b.writer_id, b.regdate as regdate, l.regdate as l_regdate
+				from board b, board_like l
+				where b.bno = l.bno
+				and like_id = #{id}
+				and b.del_chk = 'N'
+				order by l.regdate desc ) a
+			where rownum <= (#{page}+1)*20) x
+		where rnum > #{page}*20
 	]]>
 	</select> 
 	
 	<!--  게시글 상세보기 -->
 	<select id = "detailBoard" resultMap ="boardResult">
 	<![CDATA[
-	select bno, content, writer_id, to_char(regdate, 'yyyy"년"MM"월"dd"일" am hh"시" mi"분"') regdate 
-	from board b, (select user_no, id from member) m
-	where b.writer_id = m.user_no
-	and bno = #{bno}
-	and b.del_chk = 'N'
+		select bno, content, writer_id, to_char(regdate, 'yyyy"년"MM"월"dd"일" am hh"시" mi"분"') regdate 
+		from board b, (select user_no, id from member) m
+		where b.writer_id = m.user_no
+		and bno = #{bno}
+		and b.del_chk = 'N'
 	]]>
 	</select>
 	
 	<!-- 게시글 총 개수 -->
-	<select id="boardCount" resultType="int">
+	<select id="countBoard" resultType="int">
 		select count(*) as cnt from board
 		where writer_id = #{id}
 		and del_chk='N'

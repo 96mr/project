@@ -25,46 +25,18 @@
 		<selectKey keyProperty="user_no" resultType="int" order="BEFORE">
 			select board_no_seq.nextval FROM DUAL
 		</selectKey>
-		insert into Member(user_no,id,password,birth,phone,email) 
-		values(#{user_no}, #{id}, #{password},
-				#{birth, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR})
+		insert into 
+			Member(user_no,id,password,birth,phone,email) 
+		values
+			(#{user_no}, #{id}, #{password}, #{birth, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR})
 	</insert>
-	
-	<!-- 아이디로 회원정보 가져오기 (로그인 시 사용) -->
-	<select id="selectById" resultType="com.spring.ex02.vo.MemberVO">
-		select * from member
-		where id = #{id}
-	</select> 
-	
-	<select id="selectByNo" resultMap="memberProfile">
-		select user_no, id from member
-		where user_no = #{user_no}
-	</select> 
-	
-	<!-- 회원번호로 아이디, 게시글 등 정보 가져오기 -->
-	<select id="ProfileList" resultMap="memberProfile">
-		select * from (select user_no, id from member) m join profile p
-		on m.user_no = p.user_no
-		where m.user_no = #{user_no}
-	</select>
-	
-	<!-- 회원정보수정 -->
-	<update id="updateMember">
-		update member
-		set id = #{id}, birth = #{birth, jdbcType=VARCHAR},phone = #{phone, jdbcType=VARCHAR},email = #{email, jdbcType=VARCHAR}
-		where user_no = #{user_no}  
-	</update>
-	
-	<!-- 비밀번호변경 -->
-	<update id="updatePassword">
-		update member
-		set password = #{password}
-		where user_no = #{user_no}  
-	</update>
 	
 	<!-- 프로필 -->
 	<insert id = "insertProfile">
-		insert into Profile values(#{user_no},#{name}, #{introduce, jdbcType=VARCHAR}, #{image})
+		insert into 
+			Profile 
+		values
+			(#{user_no},#{name}, #{introduce, jdbcType=VARCHAR}, #{image})
 	</insert>
 	
 	<!-- 프로필 이미지 파일 -->
@@ -72,13 +44,37 @@
 		<selectKey keyProperty="fno" resultType="int" order="BEFORE">
 			select file_no_seq.nextval FROM DUAL
 		</selectKey>
-		insert into fileinfo(fno, org_name, save_name, f_size, reg_id)
-		values(#{fno}, 'profile_default.png', 'c66bd00a3eea446ab33a227a6bc28942.png', 10753, #{reg_id})
+		insert into 
+			fileinfo(fno, org_name, save_name, f_size, reg_id)
+		values
+			(#{fno}, 'profile_default.png', 'c66bd00a3eea446ab33a227a6bc28942.png', 10753, #{reg_id})
 	</insert>
+	
+	<!-- 아이디로 회원정보 가져오기 (로그인 시 사용) -->
+	<select id="selectById" resultType="com.spring.ex02.vo.MemberVO">
+		select * 
+		from member
+		where id = #{id}
+	</select> 
+	
+	<select id="selectByNo" resultMap="memberProfile">
+		select user_no, id 
+		from member
+		where user_no = #{user_no}
+	</select> 
+	
+	<!-- 회원번호로 아이디, 게시글 등 정보 가져오기 -->
+	<select id="selectProfileList" resultMap="memberProfile">
+		select * 
+		from (select user_no, id from member) m join profile p
+		on m.user_no = p.user_no
+		where m.user_no = #{user_no}
+	</select>
 	
 	<!-- 프로필 가져오기 -->
 	<select id="selectProfile" resultMap="profileResult">
-		select * from profile p join fileinfo f
+		select * 
+		from profile p join fileinfo f
 		on p.image = f.fno
 		where user_no = #{user_no}
 	</select>
@@ -90,22 +86,44 @@
 		where f.fno = p.image
 		and p.user_no = #{user_no}
 	</select>
-
+	
+	<!-- 이메일로 회원 아이디 찾기 -->
+	<select id="searchByEmail" resultType ="String">
+		select id 
+		from member 
+		where email = #{email}
+	</select>
+	
+	<!-- 회원정보수정 -->
+	<update id="updateMember">
+		update member
+		set 
+			id = #{id}, birth = #{birth, jdbcType=VARCHAR},phone = #{phone, jdbcType=VARCHAR},email = #{email, jdbcType=VARCHAR}
+		where user_no = #{user_no}  
+	</update>
+	
+	<!-- 비밀번호변경 -->
+	<update id="updatePassword">
+		update member
+		set 
+			password = #{password}
+		where user_no = #{user_no}  
+	</update>
+	
+	<!-- 프로필 정보변경 -->
 	<update id="updateProfile">
 		update profile
-		set name = #{name}, introduce= #{introduce} 
+		set 
+			name = #{name}, introduce= #{introduce} 
 		where user_no = #{user_no}
 	</update>
 	
+	<!-- 프로필사진 변경 -->
 	<update id="updateProfileImage">
 		update fileinfo
-		set org_name = #{org_name}, save_name = #{save_name}, f_size = #{f_size}
+		set 
+			org_name = #{org_name}, save_name = #{save_name}, f_size = #{f_size}
 		where fno = #{fno}
 	</update>
-	
-	<!-- 회원찾기 -->
-	<select id="searchByEmail" resultType ="String">
-		select id from member where email = #{email}
-	</select>
 	
 </mapper>

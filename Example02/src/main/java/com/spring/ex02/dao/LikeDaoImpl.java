@@ -20,7 +20,7 @@ public class LikeDaoImpl implements LikeDao {
 	
 	@Override
 	public void addLike(LikeVO vo) throws Exception {
-		sqlSession.insert(namespace+".addLike", vo);
+		sqlSession.insert(namespace+".insertLike", vo);
 	}
 
 	@Override
@@ -35,8 +35,8 @@ public class LikeDaoImpl implements LikeDao {
 	}
 
 	@Override
-	public List<MemberVO> boardLike(int no) throws Exception {
-		return sqlSession.selectList(namespace+".boardLike", no);
+	public List<MemberVO> boardLiker(int no) throws Exception {
+		return sqlSession.selectList(namespace+".selectBoardLiker", no);
 	}
 
 }

@@ -14,7 +14,7 @@ import com.spring.ex02.vo.FileVO;
 
 @Component("fileUtils")
 public class FileUtils {
-	private Log log = LogFactory.getLog(this.getClass());
+	private Log logger = LogFactory.getLog(this.getClass());
 
 	private static final String uploadPath = "E:\\workspace-sts\\.metadata\\.plugins\\"
 											+ "org.eclipse.wst.server.core\\tmp0\\"

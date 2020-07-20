@@ -1,16 +1,18 @@
 var socket = null;
 	
 $(document).ready(function (){
-	if(loginID)
-		send_alarms();
+	if(loginID){
+		send_alarms(loginID);
+	}
 });
 
-function send_alarms() {
+function send_alarms(id) {
     var wsUri = "ws://localhost:8080/echo";
+    console.log(id);
     websocket = new WebSocket(wsUri);
 
     websocket.onopen = function(evt) {
-    	onOpen(evt);
+    	onOpen(evt, id);
     };
 
     websocket.onmessage = function(evt) {
@@ -22,9 +24,10 @@ function send_alarms() {
     };
 }
 
-function onOpen(evt){
+function onOpen(evt, id){
 	console.log("open:"+evt.data);
-    websocket.send(loginID);
+	console.log(id);
+    websocket.send(id);
 }
 
 function onMessage(evt) {

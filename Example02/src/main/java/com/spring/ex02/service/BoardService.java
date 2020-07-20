@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex02.vo.BoardVO;
-import com.spring.ex02.vo.NoticeVO;
 
 public interface BoardService {
 	public int boardwrite(String user_id, BoardVO vo, MultipartFile[] file) throws Exception;

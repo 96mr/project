@@ -42,49 +42,66 @@ function infiniteBoard(last_bno, url){
 			var str = "";
 			if(data != null){
 				$.each(data, function(index, value){
-					str += "<div class='board' data-bno='"+value.bno+"'>"
-					+"<div onclick='location.href =\""+contextPath+"/"+value.member.id+"/"+value.bno+"\"'>";
+					str += `<div class='board' data-bno='${value.bno}'>
+								<div onclick="location.href ='${contextPath}/${value.member.id}/${value.bno}'">`;
 					if(send_data.tab == 2){
-						str +="<div class='board-image-list'>"
-							+"<span><img src='"+contextPath+"/resources/images/"+value.files[0].save_name+"'/></span></div>";
+						str += `<div class='board-image-list'>
+								<span><img src='${contextPath}/resources/images/${value.files[0].save_name}'/></span></div>`;
 					}
 					else{
-						str +="<div><a href='"+contextPath+"/"+value.member.id+"/profile'>"
-							+"<span class='board-member-image'>"
-							+"<img src='"+contextPath+"/resources/images/"+value.member.profile.image_file.save_name+"'/></span>"
-							+"<span class='board-member-name'>"+value.member.profile.name+"</span>"
-							+"<span class='board-member-id'>@"+value.member.id+"</span></a>";
+						str += `<div><a href='${contextPath}/${value.member.id}/profile'>
+								<span class='board-member-image'>
+								<img src='${contextPath}/resources/images/${value.member.profile.image_file.save_name}'/></span>
+								<span class='board-member-name'>${value.member.profile.name}</span>
+								<span class='board-member-id'>@${value.member.id}</span></a>`;
 						
 						if(value.files){
-							str +="<div class='swiper-container'><div class='swiper-wrapper'>";
+							str +=`<div class='swiper-container'>
+										<div class='swiper-wrapper'>`;
 							value.files.forEach(function(files){
-								str += "<div class='swiper-slide'><div class='board-image-list'>"
-									+"<span><img src='"+contextPath+"/resources/images/"+files.save_name+"'/></span></div></div>";
+								str += `<div class='swiper-slide'>
+											<div class='board-image-list'>
+												<span>
+													<img src='${contextPath}/resources/images/${files.save_name}'/>
+												</span>
+											</div>
+										</div>`;
 							});
-							str+="</div><div class='swiper-pagination'></div></div>";
+							str += `</div>
+										<div class='swiper-pagination'></div>
+									</div>`;
 						}		
-						str +="<div class='board-txt'>"+value.content+"</div></div></div>";
+						str +=`<div class='board-txt'>${value.content}</div></div></div>`;
 					}
-						str	+="<div class='board-bottom'><div class='board-icon'>"
-							+"<span onclick='likeButton('value.bno')'style='color: red;'>";
-							if(value.islike == 0){
-								 str +="<span class='unlike active'><i class='far fa-heart'></i></span>"
-									 +"<span class='like'><i class='fas fa-heart'></i></span></span>";
-							}else if(value.islike == 1){
-								 str +="<span class='unlike'><i class='far fa-heart'></i></span>"
-									 +"<span class='like active'><i class='fas fa-heart'></i></span></span>";
-						 	}
-						str += "<span class='like-cnt' onclick='liker_list('value.bno')'>"+(value.liker_list).length+"</span></div>"
-						    + "<div class='board-icon'><a href='"+contextPath+"/"+value.member.id+"/"+value.bno+"'>"
-							+ "<span><i class='far fa-comment-alt'></i></span>"
-							+ "<span class='comment-cnt'>"+value.reply.length+"</span></a></div><span class='board-regdate'>"+value.regdate+"</span>";
+					
+						str	+= `<div class='board-bottom'>
+									<div class='board-icon'>
+										<span onclick="likeButton('${value.bno}')"style='color: red;'>
+											<span class='unlike ${value.islike == 0 ?'active':''}'>
+												<i class='far fa-heart'></i>
+											</span>
+											<span class='like ${value.islike == 1 ? 'active':''}'>
+												<i class='fas fa-heart'></i>
+											</span>
+										</span>
+										<span class='like-cnt' onclick="liker_list('${value.bno}')">
+											${value.liker_list.length}
+										</span>
+									</div>
+						    		<div class='board-icon'>
+						    			<a href='${contextPath}/${value.member.id}/${value.bno}'>
+											<span><i class='far fa-comment-alt'></i></span>
+											<span class='comment-cnt'>${value.reply.length}</span>
+										</a>
+									</div>
+									<span class='board-regdate'>${value.regdate}</span>`;
 						
 						if(loginID === value.member.id){
-							str += "<div class='board-dropdown'><i class='fas fa-angle-down fa-2x'></i></div>";
+							str += `<div class='board-dropdown'><i class='fas fa-angle-down fa-2x'></i></div>`;
 						}
-					str +="</div></div>";
+					str +=`</div></div>`;
 					
-					str = str.replace(/'value.bno'/gi, value.bno);
+					
 				});
 				$(".board:last").after(str);
 				cur_pg++;

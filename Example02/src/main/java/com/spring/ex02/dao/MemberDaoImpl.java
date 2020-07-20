@@ -24,7 +24,7 @@ public class MemberDaoImpl implements MemberDao{
 	}
 	@Override
 	public MemberVO ProfileList(int no) throws Exception{
-		return sqlSession.selectOne(namespace+".ProfileList",no);
+		return sqlSession.selectOne(namespace+".selectProfileList",no);
 	}
 	@Override
 	public int insertMember(MemberVO member) throws Exception{

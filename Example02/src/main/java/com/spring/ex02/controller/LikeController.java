@@ -26,23 +26,23 @@ public class LikeController {
 	private static final Logger logger = LoggerFactory.getLogger(LikeController.class);
 	
 
-	@Resource(name="LikeService")
-	private LikeService likeService;
+	@Resource(name="LikeService") private LikeService likeService;
 	
 	
 	@RequestMapping(value = "/like/add", method = RequestMethod.POST)
-	public int addLike(@RequestParam("no") int bno, HttpSession session, Model model) throws Exception {
+	public String addLike(@RequestParam("no") int bno, HttpSession session, Model model) throws Exception {
+		logger.info("add like : " + bno);
 		String id = (String) session.getAttribute("sessionID");
-		int result = 0;
+		String result = null;
 		if(id != null) {
-			likeService.addLike(bno, id);
-			result = 1;
+			result = likeService.addLike(bno, id);
 		}
 		return result;
 	}
 	
 	@RequestMapping(value = "/like/delete", method = RequestMethod.POST)
 	public int deleteLike(@RequestParam("no") int bno, HttpSession session, Model model) throws Exception {
+		logger.info("delete like : " + bno);
 		String id = (String) session.getAttribute("sessionID");
 		int result = 0;
 		if(id != null) {
@@ -54,6 +54,7 @@ public class LikeController {
 	
 	@RequestMapping(value = "/islike/{no}", method = RequestMethod.POST)
 	public int isLike(@PathVariable("no") int bno, HttpSession session, Model model) throws Exception {
+		logger.info("is like :"+ bno);
 		String id = (String) session.getAttribute("sessionID");
 		int result = 0;
 		if(id != null) {
@@ -64,7 +65,8 @@ public class LikeController {
 	
 	@RequestMapping(value = "/likes/{no}", method = RequestMethod.POST)
 	public List<MemberVO> boardLike(@PathVariable("no") int bno, Model model) throws Exception {
-		List<MemberVO> vo = likeService.boardLike(bno);
+		logger.info("boardliker :"+ bno);
+		List<MemberVO> vo = likeService.boardLikerList(bno);
 		return vo;
 	}
 }

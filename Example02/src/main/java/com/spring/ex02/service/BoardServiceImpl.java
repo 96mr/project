@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex02.common.FileUtils;
 import com.spring.ex02.dao.BoardDao;
-import com.spring.ex02.dao.FollowDao;
 import com.spring.ex02.dao.LikeDao;
 import com.spring.ex02.dao.MemberDao;
 import com.spring.ex02.dao.NoticeDao;

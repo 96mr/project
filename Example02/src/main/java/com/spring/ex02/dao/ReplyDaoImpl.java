@@ -18,7 +18,7 @@ public class ReplyDaoImpl implements ReplyDao {
 	
 	@Override
 	public void addReply(ReplyVO vo) throws Exception {
-		sqlSession.insert(namespace+".addReply", vo);
+		sqlSession.insert(namespace+".insertReply", vo);
 	}
 
 	@Override
@@ -27,8 +27,13 @@ public class ReplyDaoImpl implements ReplyDao {
 	}
 
 	@Override
-	public List<ReplyVO> replyList(int bno) throws Exception {
-		return sqlSession.selectList(namespace+".replyList", bno);
+	public List<ReplyVO> selectReplyList(int bno) throws Exception {
+		return sqlSession.selectList(namespace+".selectReplyList", bno);
+	}
+
+	@Override
+	public ReplyVO selectReply(int repno) throws Exception {
+		return sqlSession.selectOne(namespace+".selectReply",repno);
 	}
 
 }

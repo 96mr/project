@@ -7,19 +7,58 @@
 
 	<div class="pg-header">
 		<a href="#" onClick="location.href = document.referrer;" style="color:#9E6BD1"><i class="fas fa-chevron-left "></i></a>
-			<span class="pg-header-center">${user.profile.name }</span>
-			<span class="pg-header-right">
-			<c:choose>
-				<c:when test="${sessionID ne user.id}">
-					<button type="button" id="addFollow_btn" class="follow-btn" onclick ="javascript:follow_btn(this,'${user.id }')" >팔로우</button>
-				</c:when>
-				<c:otherwise>
-					<a href="${pageContext.request.contextPath}/edit/profile"><i class="fas fa-user-cog"></i></a>
-				</c:otherwise>
-			</c:choose>			
-			</span>
+		<c:choose>
+			<c:when test="${empty user }">
+				<span class="pg-header-center">프로필</span>
+			</c:when>
+			<c:otherwise>
+				<span class="pg-header-center">${user.profile.name }</span>
+				<span class="pg-header-right">
+				<c:choose>
+					<c:when test="${sessionID ne user.id}">
+						<button type="button" id="addFollow_btn" class="follow-btn" onclick ="javascript:follow_btn(this,'${user.id }')" >팔로우</button>
+					</c:when>
+					<c:otherwise>
+						<a href="${pageContext.request.contextPath}/edit/profile"><i class="fas fa-user-cog"></i></a>
+					</c:otherwise>
+				</c:choose>			
+				</span>
+			</c:otherwise>
+		</c:choose>
 	</div>
-			
+	
+	<c:choose>
+			<c:when test="${empty user }">
+				<div class="profile" style="text-align:center">
+					<b>존재하지 않는 계정입니다</b>
+				</div>
+			</c:when>
+			<c:otherwise>		
+				<div class="profile">
+					<div class="profile-member-image">
+						<img src="${pageContext.request.contextPath }/resources/images/${user.profile.image_file.save_name}" />
+					</div>
+					<div class="profile-member-name">
+						<b>${user.profile.name }</b><br>@ ${user.id }<br>
+					</div>
+					<div class="profile-member-notice">
+						<div>
+							<b>${board_cnt}</b><br><span>게시글</span>
+						</div>
+						<div class="following-list">
+							<b></b><br><span>팔로잉</span>
+						</div>
+						<div class="follower-list">
+							<b></b><br><span>팔로워</span>
+						</div>
+					</div>
+					<div class="profile-member-introduce">
+						${user.profile.introduce }
+					</div>
+				</div>
+			</c:otherwise>
+	</c:choose>
+	
 	<div id="modal-follow" class="modal"> <!-- 팔로우/팔로워 리스트 -->
 		<div class="modal-context">
 			<div class="modal-header">
@@ -32,27 +71,3 @@
 			</div>
 		</div>
 	</div>
-			
-	<div class="profile">
-		<div class="profile-member-image">
-			<img src="${pageContext.request.contextPath }/resources/images/${user.profile.image_file.save_name}" />
-		</div>
-		<div class="profile-member-name">
-			<b>${user.profile.name }</b><br>@ ${user.id }<br>
-		</div>
-		<div class="profile-member-notice">
-			<div>
-				<b>${board_cnt}</b><br><span>게시글</span>
-			</div>
-			<div class="following-list">
-				<b></b><br><span>팔로잉</span>
-			</div>
-			<div class="follower-list">
-				<b></b><br><span>팔로워</span>
-			</div>
-			</div>
-			<div class="profile-member-introduce">
-				${user.profile.introduce }
-			</div>
-		</div>
-	

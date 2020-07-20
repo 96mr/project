@@ -75,7 +75,13 @@ $(document).on("click",'.board-dropdown',function(e){
 
 $('#board-delete').on("click",function(e){
 	var bno = $(this).parents('ul').find('li:first').text();
-	var str= "<div class='modal-content'><div>정말로 삭제하실건가요?</div><ul><li onclick='delete_board("+bno+")'>삭제</li><li class='close'>취소</li></ul></div>";
+	var str= `<div class='modal-content'>
+				<div>정말로 삭제하실건가요?</div>
+				<ul>
+					<li onclick="delete_board(${bno})">삭제</li>
+					<li class='close'>취소</li>
+				</ul>
+			 </div>`;
 
 	$('#board-popup .modal-context').html(str);
 	$('#board-popup').css("display","block");

@@ -33,21 +33,27 @@ public class LikeServiceImpl implements LikeService {
 	
 	@Override
 	@Transactional
-	public void addLike(int bno, String id) throws Exception {
+	public String addLike(int bno, String id) throws Exception {
 		BoardVO board= boardDao.boardDetail(bno);
 		MemberVO member = memberDao.selectById(id);
+		String result = "yse";
 		if(member != null && board != null) {
 			int liker_id = member.getUser_no();
 			LikeVO vo = new LikeVO(bno, liker_id);
+			
 			if(likeDao.isLike(vo) != 1) { 
 				likeDao.addLike(vo);
+				
 				if(board.getWriter_id() != liker_id) { //작성자와 좋아요 누른 사람이 일치하지 않으면 -> 좋아요 알림
 					NoticeVO notice = new NoticeVO(liker_id, board.getWriter_id(), "like");
 					notice.setBno(vo.getBno());
 					noticeDao.addNotice(notice);
 				}
+				
+				result = board.getMember().getId();
 			}
 		}
+		return result;
 	}
 
 	@Override
@@ -77,8 +83,8 @@ public class LikeServiceImpl implements LikeService {
 	}
 
 	@Override
-	public List<MemberVO> boardLike(int no) throws Exception{
-		return likeDao.boardLike(no);
+	public List<MemberVO> boardLikerList(int no) throws Exception{
+		return likeDao.boardLiker(no);
 	}
 
 }

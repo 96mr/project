@@ -1,13 +1,14 @@
-/*팔로우 버튼*/
+
 function follow_btn(e, str){                       //팔로우, 언팔로우
   	if($(e).hasClass('active')=== false){
 		$.ajax({
 	  		url: contextPath+"/follow/add", 
 	    	data: { id: str },          
-	  	  	type : "POST",
+	  	  	type : "POST",    
 	  	  	success: function(data){
 	  	  	  	$(e).addClass('active');
 	  	  	  	ff_count();
+	  	  	  	send_alarms(str);
 	  	  	},
 	  	  	error: function(error){
 	  	  	  	if(error.status == 500){
@@ -79,20 +80,20 @@ function following_list(){
 		success: function(data){
 			$.each(data, function(index, value){
 				var isF = isFollow(value.member.id);
-				str +="<div class='modal-li'>"
-					+"<a href='"+contextPath+"/"+value.member.id+"/profile'>"
-			  		+"<span class='profile-member-image'>" 
-			  		+"<img src='"+contextPath+"/resources/images/"+value.member.profile.image_file.save_name+"' /></span>"
-			  		+"<span class='profile-member-name'>"
-			  		+"<span id='#following-name'>"+value.member.profile.name+"</span><br>"
-			  		+"<span id='#following-id'>"+value.member.id+"</span></a>";
+				str += `<div class='modal-li'>
+						<a href=' ${contextPath}/${value.member.id}/profile'>
+			  			<span class='profile-member-image'>
+			  				<img src="${contextPath}/resources/images/${value.member.profile.image_file.save_name}" />
+			  			</span>
+			  			<span class='profile-member-name'>
+			  			<span id='#following-name'>${value.member.profile.name}</span><br>
+			  			<span id='#following-id'>${value.member.id}</span></a>`;
 			  	if(loginID != value.member.id){
-					str += "<button type='button' class='follow-btn follow-list ";
-					if(isF == 1)
-						str+="active";
-					str +="' onclick='javascript:follow_btn(this,'value.id');'>팔로우</button></div>";
+					str += `<button type='button' class='follow-btn follow-list 
+							${isF == 1 ?'active':''}' onclick="javascript:follow_btn(this,'${value.id}');">팔로우</button>`;
 				}
-			  	str = str.replace(/'value.id'/gi, '"' + value.member.id + '"');
+			  	str += `</div>`;
+			  
 			});
 			$('.modal-list.following').html(str);
 		}
@@ -109,20 +110,21 @@ function follower_list(){
 		success: function(data){
 			$.each(data, function(index, value){
 				var isF = isFollow(value.member.id);
-				str +="<div class='modal-li'>"
-					+"<a href='"+contextPath+"/"+value.member.id+"/profile'>"
-			  		+"<span class='profile-member-image'><img src='"+contextPath+"/resources/images/"+value.member.profile.image_file.save_name+"' /></span>"
-			  		+"<span class='profile-member-name'>"
-			  		+"<span id='#following-name'>"+value.member.profile.name+"</span><br>"
-			  		+"<span id='#following-id'>"+value.member.id+"</span></a>";
+				str += `<div class='modal-li'>
+							<a href=' ${contextPath}/${value.member.id}/profile'>
+				  			<span class='profile-member-image'>
+				  				<img src="${contextPath}/resources/images/${value.member.profile.image_file.save_name}"/>
+				  			</span>
+				  			<span class='profile-member-name'>
+				  			<span id='#following-name'>${value.member.profile.name}</span><br>
+				  			<span id='#following-id'>${value.member.id}</span>
+				  			</a>`;
 			  	if(loginID != value.member.id){
-				  	str += "<button type='button' class='follow-btn follow-list ";
-					if(isF == 1)
-						str+="active";
-						str +="' onclick='javascript:follow_btn(this,'value.id');'>팔로우</button></div>";
+				  	str += `<button type='button' class='follow-btn follow-list
+				  			${isF == 1?'active':''}' onclick="javascript:follow_btn(this,'${value.id}');">팔로우</button>`;
 			  		}
-			  	str = str.replace(/'value.id'/gi, '"' + value.member.id + '"');
-		  		
+			  	str += `</div>`;
+			  
 			});
 			$('.modal-list.follower').html(str);
 		}
@@ -133,7 +135,6 @@ function follower_list(){
 /*팔로우 중인가?*/
 function isFollow(str){
 	var result = 0;
-	console.log(str);
 	$.ajax({
 	    url: contextPath+"/isFollow", 
 	    data: { id: str },                

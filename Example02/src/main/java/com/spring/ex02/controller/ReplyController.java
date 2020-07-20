@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.ex02.service.ReplyService;
@@ -27,9 +26,10 @@ public class ReplyController {
 	private ReplyService service;
 
 	@RequestMapping(value="/comment/add", method = RequestMethod.POST)
-	public int addComment(ReplyVO vo, HttpSession session) throws Exception{
+	public String addComment(ReplyVO vo, HttpSession session) throws Exception{
+		logger.info("add comment");
 		String id = (String)session.getAttribute("sessionID");
-		int result = 0;
+		String result = null;
 		if(id != null) {
 			result = service.addComment(id, vo);
 		}
@@ -38,8 +38,11 @@ public class ReplyController {
 	
 	@RequestMapping(value="/comment/delete", method = RequestMethod.POST)
 	public int deleteComment(int rep_no, HttpSession session) throws Exception{
+		logger.info("delete Comment :"+ rep_no);
+		
 		String id = (String)session.getAttribute("sessionID");
 		int result = 0;
+		
 		if(id != null) {
 			result = service.deleteComment(rep_no);
 		}
@@ -48,6 +51,7 @@ public class ReplyController {
 
 	@RequestMapping(value="/comment/list", method = RequestMethod.POST)
 	public List<ReplyVO> commentList(int bno, HttpSession session) throws Exception{
+		logger.info("commentList :" + bno);
 		return service.commentList(bno);
 	}
 	

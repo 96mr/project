@@ -18,22 +18,22 @@ public class NoticeDaoImpl implements NoticeDao {
 
 	@Override
 	public void addNotice(NoticeVO vo) throws Exception {
-		sqlSession.insert(namespace+".addNotice", vo);
+		sqlSession.insert(namespace+".insertNotice", vo);
 	}
 
 	@Override
 	public List<NoticeVO> noticeList(int id) throws Exception {
-		return sqlSession.selectList(namespace+".noticeList", id);
+		return sqlSession.selectList(namespace+".selectNoticeList", id);
 	}
 
 	@Override
 	public int newNotice(int id) throws Exception {
-		return sqlSession.selectOne(namespace+".newNotice", id);
+		return sqlSession.selectOne(namespace+".countNewNotice", id);
 	}
 
 	@Override
 	public void chkNotice(int id) throws Exception {
-		sqlSession.update(namespace+".chkNotice", id);
+		sqlSession.update(namespace+".updateNoticeChk", id);
 	}
 
 }

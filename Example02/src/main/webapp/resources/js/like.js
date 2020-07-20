@@ -1,16 +1,3 @@
-var contextPath = getContextPath();
-var loginID = getLoginID();
-var userID = getUserID();
-function getContextPath(){
-	return contextPath;
-}
-function getLoginID(){
-	return loginID;
-}
-function getUserID(){
-	return userID;
-}
-
 /*modal창 닫기*/
 $('.close').click(function(){
     $(this).parents('.modal').css('display','none');
@@ -26,10 +13,11 @@ function likeButton(board){
 		$.ajax({
 			url: contextPath+'/like/add',
 			type:'POST',
-			data:{no: board},
+			data:{no: board},    
 			success:function(data){
 				isLike(board);
 				Likes(board);
+				send_alarms(data);
 			},
 			error: function(error){
 	  	  	  	if(error.status == 500){
@@ -89,27 +77,22 @@ function Likes(board){
 			if(data.length != 0){					
 				$.each(data, function(index, value){
 					var isF = isFollow(value.id);
-					str +="<div class='modal-li'>"
-						+"<a href='"+contextPath+"/"+value.id+"/profile'>"
-				  		+"<span class='profile-member-image'>"
-				  		+"<img src='"+contextPath+"/resources/images/"+value.profile.image_file.save_name+"' /></span>"
-				  		+"<span class='profile-member-name'>"
-				  		+"<span id='#following-name'>"+value.profile.name+"</span><br>"
-				  		+"<span id='#following-id'>"+value.id+"</span></a>";
+					str += `<div class='modal-li'>
+							<a href='${contextPath}/${value.id}/profile'>
+				  			<span class='profile-member-image'>
+				  			<img src="${contextPath}/resources/images/${value.profile.image_file.save_name}"/></span>
+				  			<span class='profile-member-name'>
+				  			<span id='#following-name'>${value.profile.name}</span><br>
+				  			<span id='#following-id'>${value.id}</span></a>`;
 				 	if(loginID != value.id){
-						str += "<button type='button' class='follow-btn follow-list ";
-						if(isF == 1)
-							str+="active";
-						
-						str +="' onclick='javascript:follow_btn(this,'value.id');'>팔로우</button></div>";
+				 		str += `<button type='button' class='follow-btn follow-list 
+							${isF == 1 ?'active':''}' onclick="javascript:follow_btn(this,'${value.id}');">팔로우</button>`;
 					}
-				  	str = str.replace(/'value.id'/gi, '"' + value.id + '"');
 				});
-				$('.modal-list.liker').html(str);
 			}else{
-				str = "<div>아직 좋아요를 누른 사람이 없습니다.</div>";
-				$('.modal-list.liker').html(str);
-			}				
+				str =`<div>아직 좋아요를 누른 사람이 없습니다.</div>`;
+			}	
+			$('.modal-list.liker').html(str);
 		}
 	});
 }

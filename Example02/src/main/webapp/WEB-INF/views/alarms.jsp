@@ -69,6 +69,14 @@
 									<c:when test="${list.notetype eq 'like' }">
 										<span class="alarm-content">님이 <a href="${pageContext.request.contextPath}/${sessionID}/${list.bno}"><b>내 글</b></a>을 좋아합니다</span>
 									</c:when>
+									<c:when test="${list.notetype eq 're-reply' }">
+										<span class="alarm-content">님이 내가 작성한 댓글에 댓글을 남겼습니다<br></span>
+										<div class="alarm-content-reply">
+											<a href="${pageContext.request.contextPath}/${sessionID}/${list.bno}">
+												${list.content }								
+											</a>
+										</div>
+									</c:when>
 									<c:otherwise>
 										<span class="alarm-content">님이 댓글을 남겼습니다<br></span>
 										<div class="alarm-content-reply">
@@ -94,6 +102,7 @@
 	</script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/like.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/follow.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/websocket.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/mycustom.js"></script>
 	<script>
 	$(document).ready(function() {

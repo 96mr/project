@@ -23,7 +23,6 @@ import com.spring.ex02.service.BoardService;
 import com.spring.ex02.service.MemberService;
 import com.spring.ex02.vo.BoardVO;
 import com.spring.ex02.vo.FileVO;
-import com.spring.ex02.vo.NoticeVO;
 import com.spring.ex02.vo.ProfileVO;
 
 /**
@@ -34,19 +33,19 @@ public class BoardController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	
-	@Resource(name="BoardService")
-	private BoardService boardService;
+	@Resource(name="BoardService") private BoardService boardService;
 	
-	@Resource(name="MemberService")
-	private MemberService memberService;
+	@Resource(name="MemberService") private MemberService memberService;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = {"/","/index","/home"}, method = RequestMethod.GET)
 	public String home(HttpSession session, Model model) throws Exception {
+		logger.info("home :");
 		if(session.getAttribute("sessionID") == null) {
 			return "redirect:/browse";
 		}
 		String user_id = (String) session.getAttribute("sessionID");
 		int page = 0;
+		
 		List<BoardVO> vo = boardService.timelineList(user_id, page);	//회원+팔로우 게시글
 		model.addAttribute("timeline", vo);
 		return "home";
@@ -54,20 +53,21 @@ public class BoardController {
 	
 	//프로필
 	@RequestMapping(value = "{user}/profile", method = RequestMethod.GET)
-	public String profile(@PathVariable("user") String id,
-							@RequestParam(value="page", defaultValue="0") int page, 
-							HttpSession session, Model model) throws Exception {
+	public String profile(@PathVariable("user") String id, @RequestParam(value="page", defaultValue="0") int page, 
+						  HttpSession session, Model model) throws Exception {
+		logger.info("profile :"+ id.toString());
 		String member = (String) session.getAttribute("sessionID");
 		Map<String, Object> map = boardService.memberProfile(id, member, 0, page); //회원의 게시글
-		model.addAttribute("user", map.get("user"));
-		model.addAttribute("board", map.get("board"));
-		model.addAttribute("board_cnt", map.get("board_cnt"));
+		model.addAttribute("user", map.get("user"))
+			 .addAttribute("board", map.get("board"))
+			 .addAttribute("board_cnt", map.get("board_cnt"));
 		return "board/m_board_all";
 	}
 	@RequestMapping(value = "{id}/profile/{tab}", method = RequestMethod.GET)
 	public String profile(@PathVariable("id") String id, @PathVariable("tab") String tab, 
 							@RequestParam(value="page", defaultValue="0") int page, 
 							HttpSession session, Model model) throws Exception {
+		logger.info("profile :"+ tab);
 		String member = (String) session.getAttribute("sessionID");
 		Map<String, Object> map = null;
 		if(tab.equals("writing"))
@@ -77,9 +77,9 @@ public class BoardController {
 		else if(tab.equals("likes"))
 			map = boardService.memberProfile(id, member, 3, page);
 		
-		model.addAttribute("user", map.get("user"));
-		model.addAttribute("board", map.get("board"));
-		model.addAttribute("board_cnt", map.get("board_cnt"));
+		model.addAttribute("user", map.get("user"))
+			 .addAttribute("board", map.get("board"))
+			 .addAttribute("board_cnt", map.get("board_cnt"));
 		return "board/m_board_"+tab;
 	}
 	
@@ -111,6 +111,7 @@ public class BoardController {
 	
 	@RequestMapping(value="/write", method = RequestMethod.GET)
 	public String boardWrite(HttpSession session, Model model) {
+		logger.info("write get");
 		return "write";
 	}
 	
@@ -119,6 +120,7 @@ public class BoardController {
 	public String boardWrite(@RequestParam(value="content", required=false) String content, 
 							@RequestParam(value="file", required=false) MultipartFile[] file, 
 							HttpSession session, RedirectAttributes rttr) throws Exception {
+		logger.info("write post :"+ content.toString());
 		String user_id = (String) session.getAttribute("sessionID");
 		if(user_id == null) {
 			rttr.addFlashAttribute("msg","게시글은 로그인 후 작성할 수 있습니다.");
@@ -171,6 +173,7 @@ public class BoardController {
 	@RequestMapping(value = "/{id}/{board_no}", method = RequestMethod.GET)
 	public String detail(@PathVariable("id") String id, @PathVariable("board_no") int bno, HttpSession session, Model model) throws Exception {
 		// 해당 게시글 bno를 이용해서 select해온다
+		logger.info("detail id: "+ id + ", bno:" + bno);
 		String user_id = (String) session.getAttribute("sessionID");
 		BoardVO vo = boardService.boardDetail(bno, id, user_id);
 		model.addAttribute("board",vo);
@@ -180,6 +183,7 @@ public class BoardController {
 	//검색 부분
 	@RequestMapping(value = "/browse", method = RequestMethod.GET)
 	public String browse(Model model) {	
+		logger.info("browse");
 		return "browse";
 	}
 	
@@ -187,6 +191,7 @@ public class BoardController {
 	public String search(@RequestParam(required = false, defaultValue = "content") String option, 
 						 @RequestParam(value="kwd", required=false) String word, HttpSession session, Model model) throws Exception {
 		//검색어로 select한 결과를 list로 가져옴
+		logger.info("search :"+ word.toString());
 		String login_id = (String) session.getAttribute("sessionID");
 		int page = 0;
 		List<BoardVO> vo = boardService.searchList(option, word, login_id, page);
@@ -199,6 +204,7 @@ public class BoardController {
 	@ResponseBody
 	@RequestMapping(value = "/board/delete", method = RequestMethod.POST)
 	public int deleteBoard(@RequestParam("bno") int bno, HttpSession session) throws Exception{
+		logger.info("delete board : " + bno);
 		String login_id = (String) session.getAttribute("sessionID");
 		if(login_id == null) {
 			return -1;
@@ -211,6 +217,7 @@ public class BoardController {
 	
 	@RequestMapping(value = "/edit/profile", method = RequestMethod.GET)
 	public String edit_profile(HttpSession session, Model model) throws Exception {
+		logger.info("edit profile get");
 		String id = (String) session.getAttribute("sessionID");
 		ProfileVO vo = memberService.selectProfile(id);
 		model.addAttribute("profile", vo);				//회원 프로필 정보를 view에 보냄
@@ -219,6 +226,7 @@ public class BoardController {
 	
 	@RequestMapping(value = "/edit/profile", method = RequestMethod.POST)
 	public String edit_profile(ProfileVO vo, MultipartFile[] file, HttpSession session, RedirectAttributes rttr) throws Exception {
+		logger.info("edit profile post");
 		String id = (String) session.getAttribute("sessionID");
 		vo.setUser_no(memberService.selectById(id).getUser_no());
 		int edit_result  = memberService.updateProfile(vo, file);	//프로필 업데이트
@@ -234,13 +242,14 @@ public class BoardController {
 	
 	@RequestMapping(value = "/alarms", method = RequestMethod.GET)
 	public String alarm(HttpSession session, Model model) throws Exception {
+		logger.info("alarm");
 		if(session.getAttribute("sessionID") == null) {
 			return "redirect:/browse";
 		}
 		String user_id = (String) session.getAttribute("sessionID");
 		Map<String,Object> map = boardService.alarmList(user_id);	//회원+팔로우 게시글
-		model.addAttribute("alarm_list", map.get("result"));
-		model.addAttribute("new_notice_cnt", map.get("new_notice_cnt"));
+		model.addAttribute("alarm_list", map.get("result"))
+			 .addAttribute("new_notice_cnt", map.get("new_notice_cnt"));
 		return "alarms";
 	}
 	

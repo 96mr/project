@@ -26,18 +26,18 @@ public class BoardDaoImpl implements BoardDao {
 		map.put("id", id);
 		map.put("tab", tab);
 		map.put("page", page);
-		return sqlSession.selectList(namespace+".boardList", map);
+		return sqlSession.selectList(namespace+".searchBoardList", map);
 	}
 	@Override
 	public List<BoardVO> timeLineList(int id, int page) throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		map.put("id", id);
 		map.put("page", page);
-		return sqlSession.selectList(namespace+".timeLineList", map);
+		return sqlSession.selectList(namespace+".searchTimeLineList", map);
 	}
 	@Override
 	public int write(BoardVO vo) throws Exception {
-		sqlSession.insert(namespace+".write",vo);
+		sqlSession.insert(namespace+".insertBoard",vo);
 		return vo.getBno();
 	}
 	@Override
@@ -59,7 +59,7 @@ public class BoardDaoImpl implements BoardDao {
 	}
 	@Override
 	public int boardCount(int id) throws Exception {
-		return sqlSession.selectOne(namespace+".boardCount", id);
+		return sqlSession.selectOne(namespace+".countBoard", id);
 	}
 	@Override
 	public List<BoardVO> searchList(Map<String, Object> map) throws Exception {
@@ -71,7 +71,7 @@ public class BoardDaoImpl implements BoardDao {
 		Map<String, Object> map = new HashMap<>();
 		map.put("id", id);
 		map.put("page", page);
-		return sqlSession.selectList(namespace+".likeList", map);
+		return sqlSession.selectList(namespace+".searchLikeList", map);
 	}
 	
 	@Override

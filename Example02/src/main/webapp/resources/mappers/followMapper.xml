@@ -5,14 +5,14 @@
 <mapper namespace="com.spring.ex02.mapper.FollowMapper">
 	<resultMap id="followingProfile" type="FollowVO" autoMapping="true">
 		<result property="t_id" column="T_ID"/>
-		<association property="member" column="T_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.ProfileList">
+		<association property="member" column="T_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.selectProfileList">
 			<id property="user_no" column="USER_NO"/>
 		</association>
 	</resultMap>
 	
 	<resultMap id="followerProfile" type="FollowVO" autoMapping="true">
 		<result property="m_id" column="M_ID"/>
-		<association property="member" column="M_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.ProfileList">
+		<association property="member" column="M_ID" javaType="com.spring.ex02.vo.MemberVO" select="com.spring.ex02.mapper.MemberMapper.selectProfileList">
 			<id property="user_no" column="USER_NO"/>
 			<result property="name" column="NAME"/>
 			<result property="image" column="IMAGE"/>
@@ -21,17 +21,17 @@
 	
 	
 	<!-- 팔로우하기 -->
-	<insert id ="addFollow">
+	<insert id ="insertFollow">
 		insert into Follow (m_id, t_id) values (#{m_id},#{t_id})
 	</insert>
 	
 	<!-- 언팔로우 -->
-	<delete id ="unFollow">
+	<delete id ="deleteFollow">
 		delete from Follow where m_id = #{m_id} and t_id = #{t_id}
 	</delete>
 	
 	<!-- 팔로잉 -->
-	<select id="following" resultMap="followingProfile">
+	<select id="selectFollowing" resultMap="followingProfile">
 		select *
 		from follow f join (select user_no, id from member) m
 		on t_id = m.user_no
@@ -40,7 +40,7 @@
 	</select>
 	
 	<!-- 팔로워 -->
-	<select id="follower" resultMap="followerProfile">
+	<select id="selectFollower" resultMap="followerProfile">
 		select *
 		from follow f join (select user_no, id from member) m
 		on m_id = m.user_no
@@ -49,13 +49,13 @@
 	</select>
 	
 	<!-- 팔로잉 수 -->
-	<select id="followCount" resultType="int">
+	<select id="countFollow" resultType="int">
 		select count(*) cnt from follow
 		where m_id = #{user_no}
 	</select>
 	
 	<!-- 팔로워 수 -->
-	<select id="followerCount" resultType="int">
+	<select id="countFollower" resultType="int">
 		select count(*) cnt from follow
 		where t_id = #{user_no}
 	</select>

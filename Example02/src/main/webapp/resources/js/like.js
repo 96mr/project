@@ -78,16 +78,19 @@ function Likes(board){
 				$.each(data, function(index, value){
 					var isF = isFollow(value.id);
 					str += `<div class='modal-li'>
-							<a href='${contextPath}/${value.id}/profile'>
-				  			<span class='profile-member-image'>
-				  			<img src="${contextPath}/resources/images/${value.profile.image_file.save_name}"/></span>
-				  			<span class='profile-member-name'>
-				  			<span id='#following-name'>${value.profile.name}</span><br>
-				  			<span id='#following-id'>${value.id}</span></a>`;
+								<a href='${contextPath}/${value.id}/profile'>
+				  					<span class='profile-member-image'>
+				  						<img src="${contextPath}/resources/images/${value.profile.image_file.save_name}"/>
+				  					</span>
+				  					<span class='profile-member-name'>
+				  					<span id='#following-name'>${value.profile.name}</span><br>
+				  					<span id='#following-id'>${value.id}</span>
+				  				</a>`;
 				 	if(loginID != value.id){
 				 		str += `<button type='button' class='follow-btn follow-list 
 							${isF == 1 ?'active':''}' onclick="javascript:follow_btn(this,'${value.id}');">팔로우</button>`;
 					}
+				 	str += `</div>`;
 				});
 			}else{
 				str =`<div>아직 좋아요를 누른 사람이 없습니다.</div>`;

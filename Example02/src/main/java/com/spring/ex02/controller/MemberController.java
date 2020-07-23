@@ -102,7 +102,10 @@ public class MemberController {
 	
 	/*로그인 부분*/
 	@RequestMapping(value = "/login", method = RequestMethod.GET) //로그인 페이지 이동
-	public String login() {
+	public String login(HttpSession session) {
+		if((String)session.getAttribute("sessionID") != null) {
+			return "redirect:/";
+		}
 		return "login";
 	}
 	
@@ -110,7 +113,7 @@ public class MemberController {
 	public String login(@ModelAttribute("member") MemberVO member,HttpSession session, RedirectAttributes rttr) throws Exception {
 		logger.info("login: " + member.toString());
 		if((String)session.getAttribute("sessionID") != null) {
-			return "home";
+			return "redirect:/";
 		}
 		
 		int result = service.memberLogin(member); //1: 성공, -1 : 실패

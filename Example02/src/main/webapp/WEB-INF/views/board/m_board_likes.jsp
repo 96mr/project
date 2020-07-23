@@ -50,13 +50,20 @@
 										<span class="board-member-id">${list.member.id }</span>
 									</a>
 									<c:if test="${not empty list.files }">
-										<c:forEach var="files" items="${list.files }">
-											<div class="board-image-list">
-												<span> <img
-													src="${pageContext.request.contextPath }/resources/images/${files.save_name }" />
-												</span>
+										<div class="swiper-container">
+									    	<div class="swiper-wrapper">
+												<c:forEach var="files" items="${list.files }">
+													<div class="swiper-slide">
+														<div class="board-image-list">
+															<span> 
+															<img src="${pageContext.request.contextPath }/resources/images/${files.save_name }" />
+															</span>
+														</div>
+													</div>
+												</c:forEach>
 											</div>
-										</c:forEach>
+										  <div class="swiper-pagination"></div>
+										</div>
 									</c:if>
 									<div class="board-txt">${list.content }</div>
 								</div>

@@ -23,7 +23,6 @@ function infiniteBoard(last_bno, url){
 	    }
 		send_data = {"page" : cur_pg, "kwd": result[0], "option": result[1]};
 		url = "/search";
-		console.log("search");
 	}else{
 		if(url === "profile") tab = 0;
 		else if(url === "writing") tab = 1;

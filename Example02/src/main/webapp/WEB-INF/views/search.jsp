@@ -65,6 +65,7 @@
 									  <div class="swiper-pagination"></div>
 									</div>
 								</c:if>
+								
 								<div class="board-txt">${list.content }</div>
 							</div>
 						</div>

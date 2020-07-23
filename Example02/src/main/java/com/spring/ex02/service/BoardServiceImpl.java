@@ -131,7 +131,7 @@ public class BoardServiceImpl implements BoardService {
 			}
 			
 			if(id != null) {
-				MemberVO vo = memberDao.selectById(id);
+				MemberVO vo = memberDao.selectById(user_id);
 				int login_no = vo.getUser_no();
 				result.setIslike(likeDao.isLike(new LikeVO(bno, login_no)));
 			}

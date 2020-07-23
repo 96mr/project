@@ -41,8 +41,8 @@
 				</c:if>
 				<c:forEach var="list" items="${board}">
 					<!--전체(타임라인식)-->
-					<div class="board" data-bno="${list.bno}">
-						<div onclick="location.href ='${pageContext.request.contextPath}/${list.member.id}/${list.bno}'">
+					<div class="board" data-bno="${list.bno}" onclick="location.href ='${pageContext.request.contextPath}/${list.member.id}/${list.bno}'">
+						<div >
 							<!--글 하나씩-->
 							<div class="board-image-list">
 								<span><img src="${pageContext.request.contextPath}/resources/images/${list.files[0].save_name }"></span>

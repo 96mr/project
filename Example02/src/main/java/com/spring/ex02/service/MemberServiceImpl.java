@@ -61,12 +61,10 @@ public class MemberServiceImpl implements MemberService {
 			int user_no = dao.insertMember(member); //회원등록
 			
 			FileVO fvo = new FileVO();
-			fvo.setReg_id(user_no);
-			
+			fvo.setReg_id(user_no);			
 			int fno = dao.insertProfileImageFile(fvo);	//회원 프로필 파일번호
 			
-			ProfileVO pvo = new ProfileVO(user_no, member.getId(), fno,"");
-			dao.insertProfile(pvo);	//회원프로필
+			dao.insertProfile(new ProfileVO(user_no, id, fno,""));	//회원프로필
 			return 1;	//가입 성공
 		}else {
 			return 0; //가입 실패
@@ -87,8 +85,7 @@ public class MemberServiceImpl implements MemberService {
 		ProfileVO result = new ProfileVO();
 		MemberVO member = dao.selectById(id);
 		if(member!= null) {
-			int no = member.getUser_no();
-			result =  dao.selectProfile(no);
+			result =  dao.selectProfile(member.getUser_no());
 		}
 		return result;
 	}
@@ -101,6 +98,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		if(name!=null && name.trim().length() != 0) { //이름이 비어있지 않은가?
 			dao.updateProfile(profile);
+			
 			List<FileVO> vo = fileutils.parseFileInfo(user_no, file);
 			for(int i = 0 ; i < vo.size();i++) {
 				FileVO fvo = vo.get(i);
@@ -161,11 +159,12 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	@Transactional
 	public int sendRandomPW(String how, String where, String who) throws Exception {
-		if(who == null) {
+		MemberVO user = dao.selectById(who);
+		if(user == null) {
 			return 0;
 		}
-		if(how.equals("email")) {
-			MemberVO user = dao.selectById(who);
+		
+		if(how.equals("email")) {			//이메일로 임시비밀번호 보내기
 			String key = new Tempkey().getKey(10,false);
 			user.setPassword(passwordEncoder.encode(key));
 			dao.updatePassword(user);

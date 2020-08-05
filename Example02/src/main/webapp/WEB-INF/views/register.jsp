@@ -13,11 +13,7 @@
 <title>홈</title>
 </head>
 <body>
-<c:if test ="${not empty msg}">
-	<script>
-		alert("${msg}");
-	</script>
-</c:if>
+
 	<div class="allcontainer">
 		<section class="content-login">
 			<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath }/resources/images/logo.png" width="50px" alt="logo" /></a>
@@ -26,12 +22,12 @@
 				<h4>필수항목</h4>
 				<h5 style="width:17%;margin:0.1em; display:inline-block">아이디</h5>
 				<form:input path="id" type="text" name="id" id="userId" placeholder="아이디를 입력하세요"/><br />
-				<small id="idNotice"></small><br>
 				<form:errors path="id" element="small"/><br>	
+				<small id="idNotice"></small><br>
 				<h5>비밀번호</h5>
 				<form:input path="password" type="password" name="pw" id="userPw" placeholder="비밀번호를 입력하세요"/><br />
-				<small id="pwNotice"></small><br>
 				<form:errors path="password" element="small"/><br>
+				<small id="pwNotice"></small><br>
 				<h5>비밀번호 확인</h5>
 				<input type="password" name="pwChk" id="pwChk" placeholder="비밀번호를 입력하세요"/><br />
 				<small id="pwChkNotice"></small><br>
@@ -44,12 +40,11 @@
 				<small id = "birthNotice"></small><br>
 				<h5>폰번호</h5>
 				<input type="text" name="phone" placeholder="선택항목 : -를 제외한 번호만 입력해주세요(ex.01012345678)"/><br />
-				<button type="submit" name="button">가입하기</button>
+				<button type="submit">가입하기</button>
 			</form:form>
 		</section>
 	</div>
 	<script>
-   //유효성 검사 ajax (이미 존재하는 아이디, 패스워드)
    	$('#userId').keyup(function(){
    	   	var idNotice = $('#idNotice');
    	   	$.ajax({
@@ -57,7 +52,6 @@
    	   	   	type:'post',
    	   	   	data:{"id":$("#userId").val()},
    	   	   	success:function(data){
-   	   	   	   	console.log(data);
    	   	   	   	if(data == -1){ // 존재하는 아이디
    	   	   	   		idNotice.text('이미 존재하는 아이디입니다.');
 	   	   	   		idNotice.css('color','red');
@@ -90,7 +84,7 @@
 		});
 	});
 	
-	$(function(){	//비밂번호 체크
+	$(function(){
 		$('#pwChk').keyup(function(){
 			$('#pwChkNotice').text('');
 		});
@@ -106,6 +100,8 @@
 			}
 		});
 
+		$()
+		
 		$('#birth').blur(function(){
 			$('#birthNotice').text('');
 		});

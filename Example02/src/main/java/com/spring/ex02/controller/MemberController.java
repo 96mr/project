@@ -51,13 +51,14 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String join(@Valid @ModelAttribute("vo") MemberVO member, @RequestParam("pwChk") String pwChk, BindingResult result, HttpServletResponse response, RedirectAttributes rttr) throws Exception{
-		logger.info("join : " + member.toString());
-		if(result.hasErrors())
-			return "register";
+	public String join(@Valid @ModelAttribute("vo") MemberVO member, @RequestParam("pwChk") String pwChk, BindingResult result,  RedirectAttributes rttr) throws Exception{
+		logger.info("join : ");
+		
+		if(result.hasErrors()) {
+			return "register"; 
+		}
 		
 		if(!pwChk.equals(member.getPassword())) {
-			rttr.addFlashAttribute("msg","비밀번호를 확인해주세요.");
 			return "register";
 		}
 		
@@ -66,7 +67,6 @@ public class MemberController {
 			rttr.addFlashAttribute("msg", "성공적으로 가입되었습니다!");
 			return "redirect:/login";
 		}else {
-			rttr.addFlashAttribute("msg","가입에 실패하였습니다.");
 			return "register";
 		}
 	}
@@ -110,7 +110,8 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST) //로그인 시도
-	public String login(@ModelAttribute("member") MemberVO member,HttpSession session, RedirectAttributes rttr) throws Exception {
+	public String login(@ModelAttribute("member") MemberVO member,
+					   HttpSession session, HttpServletResponse response, RedirectAttributes rttr) throws Exception {
 		logger.info("login: " + member.toString());
 		if((String)session.getAttribute("sessionID") != null) {
 			return "redirect:/";
@@ -170,7 +171,7 @@ public class MemberController {
 			rttr.addFlashAttribute("msg", "회원정보가 수정되었습니다!");
 			return "redirect:/settings";
 		}else {
-			model.addAttribute("failed_msg", "비밀번호를 확인해주세요");
+			model.addAttribute("fail_msg", "비밀번호를 확인해주세요");
 			return "settings/edit_account";
 		}
 	}
@@ -182,14 +183,20 @@ public class MemberController {
 	
 	@RequestMapping(value = "/settings/password", method = RequestMethod.POST)
 	public String edit_password(@RequestParam("pw") String pw,@RequestParam("new_pw") String new_pw, @RequestParam("new_pwChk") String pwChk, 
-								HttpSession session, RedirectAttributes rttr) throws Exception {
+								HttpSession session, Model model, RedirectAttributes rttr) throws Exception {
 		logger.info("edit password pw : "+ pw +", new_pw : "+ ", pwchk : " + pwChk);
-		String user = (String) session.getAttribute("sessionID");
+		
+		String user = (String) session.getAttribute("sessionID"); //현재 로그인한 회원 아이디
 			
 		String pwReg = "^[a-z0-9]{8,30}$";
 		Pattern p = Pattern.compile(pwReg);
 		Matcher m = p.matcher(new_pw);
-		if(!m.matches() || !new_pw.equals(pwChk)) {	     //새 비밀번호 정규식 x
+		if(!m.matches()) {	     //새 비밀번호 정규식 x
+			model.addAttribute("fail_msg", "새 비밀번호 형식이 올바르지 않습니다");
+			return "settings/edit_password";
+		}	
+		if(!new_pw.equals(pwChk)) {
+			model.addAttribute("fail_msg", "새 비밀번호 확인이 일치하지 않습니다");
 			return "settings/edit_password";
 		}
 
@@ -199,21 +206,22 @@ public class MemberController {
 			rttr.addFlashAttribute("msg", "비밀번호가 변경되었습니다!");
 			return "redirect:/settings";
 		}else {
+			model.addAttribute("fail_msg", "비밀번호가 일치하지 않습니다");
 			return "settings/edit_password";
 		}
 	}
 	
 	@RequestMapping(value = "/find/id", method = RequestMethod.GET) 
 	public String find_id(Model model) throws Exception {
-		
+		logger.info("find id get");
 		return "find_id";
 	}
 	
 	@RequestMapping(value = "/find/id", method = RequestMethod.POST) 
 	public String find_id(@RequestParam(value="email",required=false) String email, Model model) throws Exception {
 		logger.info("find id post");
-		List<String> find_result = null;
-		find_result = service.idFindByEmail(email);
+		
+		List<String> find_result = service.idFindByEmail(email);
 		model.addAttribute("result_count", find_result.size())
 			 .addAttribute("result", find_result);
 		return "find_id_result";
@@ -221,22 +229,22 @@ public class MemberController {
 	
 	@RequestMapping(value = "/find/password", method = RequestMethod.GET) 
 	public String find_pw(Model model) throws Exception {
+		logger.info("find pw get");
 		return "find_password";
 	}
 	
 	@RequestMapping(value = "/find/password", method = RequestMethod.POST) 
 	public String find_pw(@RequestParam(value="id",required=false) String id, 
 						  Model model) throws Exception {
-		logger.info("find pw post");
+		logger.info("find pw post id :" + id);
 		MemberVO vo = service.selectById(id);
 		if(vo == null) {
 			model.addAttribute("send_failed", "존재하지 않는 아이디입니다!");
 			return "find_password";
 		}
-		String to_email = vo.getEmail(); //해당 id의 이메일을 가져옴
-		String to_phone = vo.getPhone();
-		model.addAttribute("to_email", to_email)
-			 .addAttribute("to_phone", to_phone)
+		
+		model.addAttribute("to_email", vo.getEmail())
+			 .addAttribute("to_phone", vo.getPhone())
 			 .addAttribute("user_id", id);
 		return "find_password_how";
 	}
@@ -245,8 +253,8 @@ public class MemberController {
 	public String find_pw_how(@RequestParam("how") String how, @RequestParam("where") String where,
 							  @RequestParam("user_id") String who,Model model) throws Exception {
 		logger.info("find pw how :"+how +", where :"+ where +", who :"+ who);
-		int result = 0;
-		result = service.sendRandomPW(how, where, who); // 임시 비밀번호 전송
+		int result = service.sendRandomPW(how, where, who); // 임시 비밀번호 전송
+		
 		if(result == 1) {
 			return "find_password_result";
 		}else {

@@ -45,10 +45,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional
 	public int boardwrite(String user_id ,BoardVO board_vo, MultipartFile[] file) throws Exception {
-		if(user_id == null) {
+		MemberVO member_vo = memberDao.selectById(user_id);
+		if(member_vo == null) {
 			return -1;
 		}
-		MemberVO member_vo = memberDao.selectById(user_id);
+		
 		int writer = member_vo.getUser_no();
 		board_vo.setWriter_id(writer);
 		
@@ -75,12 +76,6 @@ public class BoardServiceImpl implements BoardService {
 		if(vo != null) {
 			user_no = vo.getUser_no();		//해당 프로필의 회원 번호
 			
-			//로그인 여부
-			int login_no = 0;
-			if(id != null) {
-				login_no = memberDao.selectById(id).getUser_no();		
-			}
-			
 			//게시글 리스트
 			if(tab == 3) { 	
 				list = boardDao.likeList(user_no, curPage);
@@ -89,6 +84,12 @@ public class BoardServiceImpl implements BoardService {
 				list = boardDao.boardlist(user_no, tab, curPage); 
 			}		
 			
+			
+			//로그인 여부
+			int login_no = 0;
+			if(id != null) {
+				login_no = memberDao.selectById(id).getUser_no();		
+			}
 			for(Iterator<BoardVO> i = list.iterator() ; i.hasNext() ;) {
 				BoardVO b = i.next();
 				
@@ -127,10 +128,10 @@ public class BoardServiceImpl implements BoardService {
 		if(writer != null) {
 			result = boardDao.boardDetail(bno);
 			if(result == null || result.getWriter_id() != writer.getUser_no()) {
-				return null;
+				return result;
 			}
 			
-			if(id != null) {
+			if(user_id != null) {
 				MemberVO vo = memberDao.selectById(user_id);
 				int login_no = vo.getUser_no();
 				result.setIslike(likeDao.isLike(new LikeVO(bno, login_no)));

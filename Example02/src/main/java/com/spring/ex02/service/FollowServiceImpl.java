@@ -30,12 +30,13 @@ public class FollowServiceImpl implements FollowService {
 	
 	@Override
 	public List<FollowVO> followingById(String id) throws Exception{	//팔로잉 목록
+		List<FollowVO> result = new ArrayList<FollowVO>();
 		MemberVO vo = memberdao.selectById(id);
 		if(vo == null) {
-			return null;
+			return result;
 		}
 		int user_no = vo.getUser_no();
-		return followdao.following(user_no);
+		return result = followdao.following(user_no);
 	}
 	
 	@Override

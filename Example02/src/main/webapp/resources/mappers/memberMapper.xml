@@ -23,7 +23,7 @@
 	<!-- 회원가입 -->
 	<insert id ="insertMember">
 		<selectKey keyProperty="user_no" resultType="int" order="BEFORE">
-			select board_no_seq.nextval FROM DUAL
+			select member_no_seq.nextval FROM DUAL
 		</selectKey>
 		insert into 
 			Member(user_no,id,password,birth,phone,email) 

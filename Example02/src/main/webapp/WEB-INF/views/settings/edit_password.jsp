@@ -42,6 +42,7 @@
 					<h6>비밀번호 확인</h6>
 					<input  type="password" name="new_pwChk" id="pwChk" placeholder="변경할 비밀번호 확인"/><br />
 					<small id="pwChkNotice"></small><br>
+					<small>${fail_msg }</small>
 					<button type="submit" name="button">수정하기</button>
 			</form>
 			</div>

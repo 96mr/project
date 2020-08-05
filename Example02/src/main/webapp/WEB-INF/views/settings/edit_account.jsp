@@ -47,7 +47,7 @@
 				<form:input path="phone" type="text" name="phone" placeholder="선택항목 : -를 제외한 번호만 입력해주세요(ex.01012345678)"/><br />
 				<h6>현재 비밀번호</h6>
 				<form:input path="password" type="password" name="pw" id="userPw" placeholder="수정하려면 현재 비밀번호를 입력하세요"/><br />
-				<small id="pwNotice"></small><br>
+				<small id="pwNotice">${fail_msg}</small><br>
 				<form:errors path="password" element="small"/><br>
 				<button type="submit" name="button">수정하기</button>
 			</form:form>
@@ -55,5 +55,62 @@
 
 		</section>
 	</div>
+	<script>
+	$('#birth').blur(function(){
+		$('#birthNotice').text('');
+	});
+	$('#birth').blur(function(){
+		var birth = $(this).val();
+		var year = Number(birth.substr(0,4));	//년
+		var month = Number(birth.substr(4,2));	//월
+		var day = Number(birth.substr(6,2));	//일
+		
+		if (birth.length == 8) {
+			if (day >= 1 && (month < 13 && month >= 1)){
+					if (month == 2) {
+						var leap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));//윤년
+						if (day > 29 || (day == 29 && !leap)) {
+								$('#birthNotice').text('생년월일을 확인해주세요');
+								$('#birthNotice').css('color','red');
+								return false;
+						}
+						else{
+								$('#birthNotice').text('');
+						}
+					}
+					else if (month == 4 || month == 6 || month == 9 || month == 11) { //30일까지 있는 달
+						if (day > 30) {
+								$('#birthNotice').text('생년월일을 확인해주세요');
+								$('#birthNotice').css('color','red');
+								return false;
+						}
+						else{
+								$('#birthNotice').text('');
+						}
+					}
+					else {
+						if (day > 31) {
+								$('#birthNotice').text('생년월일을 확인해주세요');
+								$('#birthNotice').css('color','red');
+								return false;
+						}
+						else {
+								$('#birthNotice').text('');
+						}
+					}
+			}
+			else {
+				$('#birthNotice').text('생년월일을 확인해주세요');
+				$('#birthNotice').css('color','red');
+				return false;
+			}
+		}else{
+			$('#birthNotice').text('생년월일을 확인해주세요');
+			$('#birthNotice').css('color','red');
+			return false;
+		}
+		
+	});
+	</script>
 </body>
 </html>

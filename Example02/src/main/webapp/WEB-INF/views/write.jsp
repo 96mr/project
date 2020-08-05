@@ -125,6 +125,7 @@
 	        alert("최대 300자까지 입력 가능합니다.");
 	        $(this).val(content.substring(0, 300));
 	        $('#content-count').html("300");
+	        $('.boardwrite-btn button').attr('disabled',true);
 	    }
 	});
     

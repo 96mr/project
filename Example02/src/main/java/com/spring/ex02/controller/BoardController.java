@@ -40,13 +40,11 @@ public class BoardController {
 	@RequestMapping(value = {"/","/index","/home"}, method = RequestMethod.GET)
 	public String home(HttpSession session, Model model) throws Exception {
 		logger.info("home :");
-		if(session.getAttribute("sessionID") == null) {
+		String user_id = (String) session.getAttribute("sessionID");
+		if(user_id == null) {
 			return "redirect:/browse";
 		}
-		String user_id = (String) session.getAttribute("sessionID");
-		int page = 0;
-		
-		List<BoardVO> vo = boardService.timelineList(user_id, page);	//회원+팔로우 게시글
+		List<BoardVO> vo = boardService.timelineList(user_id, 0);	//회원+팔로우 게시글
 		model.addAttribute("timeline", vo);
 		return "home";
 	}
@@ -56,8 +54,9 @@ public class BoardController {
 	public String profile(@PathVariable("user") String id, @RequestParam(value="page", defaultValue="0") int page, 
 						  HttpSession session, Model model) throws Exception {
 		logger.info("profile :"+ id.toString());
-		String member = (String) session.getAttribute("sessionID");
-		Map<String, Object> map = boardService.memberProfile(id, member, 0, page); //회원의 게시글
+		String user_id = (String) session.getAttribute("sessionID");
+		
+		Map<String, Object> map = boardService.memberProfile(id, user_id, 0, page); //회원의 게시글
 		model.addAttribute("user", map.get("user"))
 			 .addAttribute("board", map.get("board"))
 			 .addAttribute("board_cnt", map.get("board_cnt"));
@@ -68,14 +67,17 @@ public class BoardController {
 							@RequestParam(value="page", defaultValue="0") int page, 
 							HttpSession session, Model model) throws Exception {
 		logger.info("profile :"+ tab);
-		String member = (String) session.getAttribute("sessionID");
-		Map<String, Object> map = null;
+		String user_id = (String) session.getAttribute("sessionID");
+		int tab_num = 0;
+		
 		if(tab.equals("writing"))
-			map = boardService.memberProfile(id, member, 1, page); 
+			tab_num = 1; 
 		else if(tab.equals("media"))
-			map = boardService.memberProfile(id, member, 2, page);
+			tab_num = 2;
 		else if(tab.equals("likes"))
-			map = boardService.memberProfile(id, member, 3, page);
+			tab_num = 3;
+		
+		Map<String, Object> map = boardService.memberProfile(id, user_id, tab_num, page); 
 		
 		model.addAttribute("user", map.get("user"))
 			 .addAttribute("board", map.get("board"))
@@ -119,13 +121,18 @@ public class BoardController {
 	@RequestMapping(value="/write", method = RequestMethod.POST)
 	public String boardWrite(@RequestParam(value="content", required=false) String content, 
 							@RequestParam(value="file", required=false) MultipartFile[] file, 
-							HttpSession session, RedirectAttributes rttr) throws Exception {
+							HttpSession session, Model model, RedirectAttributes rttr) throws Exception {
 		logger.info("write post :"+ content.toString());
 		String user_id = (String) session.getAttribute("sessionID");
 		if(user_id == null) {
-			rttr.addFlashAttribute("msg","게시글은 로그인 후 작성할 수 있습니다.");
-			return "redirect:/login";
+			return "login";
 		}
+		
+		if(content.length()>300) {
+			model.addAttribute("fail_msg", "글자수를 초과하였습니다.");
+			return "write";
+		}
+		
 		BoardVO vo = new BoardVO();
 		vo.setContent(content);						
 		boardService.boardwrite(user_id, vo, file);
@@ -193,8 +200,7 @@ public class BoardController {
 		//검색어로 select한 결과를 list로 가져옴
 		logger.info("search :"+ word.toString());
 		String login_id = (String) session.getAttribute("sessionID");
-		int page = 0;
-		List<BoardVO> vo = boardService.searchList(option, word, login_id, page);
+		List<BoardVO> vo = boardService.searchList(option, word, login_id, 0);
 		model.addAttribute("search_option", option);
 		model.addAttribute("keyword", word);
 		model.addAttribute("search_result",vo);
@@ -225,7 +231,8 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/edit/profile", method = RequestMethod.POST)
-	public String edit_profile(ProfileVO vo, MultipartFile[] file, HttpSession session, RedirectAttributes rttr) throws Exception {
+	public String edit_profile(ProfileVO vo, MultipartFile[] file, HttpSession session, 
+								Model model, RedirectAttributes rttr) throws Exception {
 		logger.info("edit profile post");
 		String id = (String) session.getAttribute("sessionID");
 		vo.setUser_no(memberService.selectById(id).getUser_no());
@@ -235,8 +242,8 @@ public class BoardController {
 			rttr.addFlashAttribute("msg","성공적으로 변경되었습니다.");
 			return "redirect:/"+id+"/profile";
 		}else {
-			rttr.addFlashAttribute("msg","변경에 실패하였습니다.");
-			return "redirect:/edit/profile";
+			model.addAttribute("fail_msg", "변경 실패하였습니다");
+			return "edit_profile";
 		}
 	}
 	

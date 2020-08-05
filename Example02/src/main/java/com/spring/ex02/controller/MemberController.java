@@ -51,14 +51,16 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String join(@Valid @ModelAttribute("vo") MemberVO member, @RequestParam("pwChk") String pwChk, BindingResult result,  RedirectAttributes rttr) throws Exception{
+	public String join(@Valid @ModelAttribute("vo") MemberVO member, BindingResult result,  
+						Model model, RedirectAttributes rttr) throws Exception{
 		logger.info("join : ");
 		
 		if(result.hasErrors()) {
 			return "register"; 
 		}
 		
-		if(!pwChk.equals(member.getPassword())) {
+		if(!member.getPw_chk().equals(member.getPassword())) {
+			model.addAttribute("fail_msg", "비밀번호가 일치하지 않습니다");
 			return "register";
 		}
 		

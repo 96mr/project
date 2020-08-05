@@ -11,6 +11,7 @@ public class MemberVO {
 	private String phone;
 	private String Email;
 	private String privacy;
+	private String pw_chk;
 	private ProfileVO profile;
 	
 	//생성자
@@ -65,6 +66,12 @@ public class MemberVO {
 	}
 	public void setPrivacy(String privacy) {
 		this.privacy = privacy;
+	}
+	public String getPw_chk() {
+		return pw_chk;
+	}
+	public void setPw_chk(String pw_chk) {
+		this.pw_chk = pw_chk;
 	}
 	public ProfileVO getProfile() {
 		return profile;

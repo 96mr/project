@@ -13,8 +13,8 @@
 		<interceptor>
 			<mapping path="/write"/>
 			<mapping path="/edit/profile"/>
-			<mapping path="/addFollow"/>
-			<mapping path="/unFollow"/>
+			<mapping path="/follow/add"/>
+			<mapping path="/follow/delete"/>
 			<mapping path="/like/add"/>
 			<mapping path="/like/delete"/>
 			<mapping path="/alarms"/>

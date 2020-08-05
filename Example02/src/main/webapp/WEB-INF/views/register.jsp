@@ -29,8 +29,8 @@
 				<form:errors path="password" element="small"/><br>
 				<small id="pwNotice"></small><br>
 				<h5>비밀번호 확인</h5>
-				<input type="password" name="pwChk" id="pwChk" placeholder="비밀번호를 입력하세요"/><br />
-				<small id="pwChkNotice"></small><br>
+				<input type="password" name="pw_chk" id="pwChk" placeholder="비밀번호를 입력하세요"/><br />
+				<small id="pwChkNotice">${fail_msg }</small><br>
 				<h4>선택항목</h4>
 				<h5>이메일</h5>
 				<input type="email" name="email" placeholder="선택항목 : 이메일을 입력하세요(ex.abcd@aaa.com)"/><br />

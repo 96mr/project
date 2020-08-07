@@ -7,7 +7,7 @@ $(document).ready(function (){
 });
 
 function send_alarms(id) {
-    var wsUri = "ws://localhost:8080/echo";
+    var wsUri = "ws://localhost:8080/"+contextPath+"/echo";
     websocket = new WebSocket(wsUri);
 
     websocket.onopen = function(evt) {

@@ -3,13 +3,13 @@
 <%@ page session="true" %>
 <html>
 <head>
-<link rel="stylesheet" href="/resources/css/mycustom.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mycustom.css" />
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
 <script src="//code.jquery.com/jquery-3.2.1.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 
-<title>홈</title>
+<title>비밀번호 찾기 - 방법</title>
 </head>
 <body>
 <c:if test ="${not empty msg}">

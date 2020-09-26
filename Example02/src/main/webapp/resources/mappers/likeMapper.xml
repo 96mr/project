@@ -6,7 +6,7 @@
 	
 	
 	<!-- 좋아요  -->
-	<insert id="insertLike">
+	<insert id="insertLike" parameterType="LikeVO">
 		insert into 
 			board_like (bno, like_id) 
 		values
@@ -14,7 +14,7 @@
 	</insert>
 	
 	<!-- 좋아요 취소 -->
-	<delete id="deleteLike">
+	<delete id="deleteLike" parameterType="LikeVO">
 		delete 
 		from board_like 
 		where bno = #{bno} 
@@ -22,7 +22,7 @@
 	</delete>
 	
 	<!-- 좋아요 여부-->
-	<select id="isLike" resultType = "int">
+	<select id="isLike" parameterType="LikeVO" resultType ="int">
 		select count(*) 
 		from board_like
 		where bno = #{bno} 
@@ -30,7 +30,7 @@
 	</select>
 	
 	<!-- 좋아요 누른 사람 -->
-	<select id = "selectBoardLiker" resultMap="com.spring.ex02.mapper.MemberMapper.memberProfile">
+	<select id = "selectBoardLiker" parameterType="int" resultMap="com.spring.ex02.mapper.MemberMapper.memberProfile">
 		select *  
 		from board_like l, (select user_no, id from member) m
 		where l.like_id = m.user_no

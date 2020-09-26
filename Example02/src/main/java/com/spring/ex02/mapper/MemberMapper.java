@@ -14,7 +14,7 @@ public interface MemberMapper {
 	public MemberVO selectById(String id) throws Exception;
 	public ProfileVO selectProfile(int user_no) throws Exception;
 	public FileVO selectProfileImage(int user_no) throws Exception;
-	public MemberVO ProfileList(int no) throws Exception;
+	public MemberVO selectProfileList(int no) throws Exception;
 	
 	public void updateProfile(ProfileVO profile) throws Exception;
 	public void updateProfileImage(FileVO vo) throws Exception;

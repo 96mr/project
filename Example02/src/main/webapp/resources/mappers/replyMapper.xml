@@ -13,20 +13,20 @@
 	
 	
 	<!-- 댓글 작성  -->
-	<insert id="insertReply">
+	<insert id="insertReply" parameterType="ReplyVO">
 		insert into board_reply (repno, bno, content, writer_id, parent_id) 
 		values(reply_no_seq.nextval, #{bno}, #{content}, #{writer_id}, #{parent_id, jdbcType=NUMERIC})
 	</insert>
 	
 	<!-- 댓글 삭제 -->
-	<update id="deleteReply">
+	<update id="deleteReply" parameterType="int">
 	<![CDATA[
 		update board_reply set del_chk = 'Y' where repno = #{repno}
 	]]>
 	</update>
 	
 	<!-- 댓글 -->
-	<select id="selectReply" resultMap="replyResult">
+	<select id="selectReply" parameterType="int" resultMap="replyResult">
 	<![CDATA[
 		select repno, bno, content, del_chk, regdate, writer_id, parent_id
 		from board_reply b
@@ -35,7 +35,7 @@
 	</select>
 
 	<!-- 댓글 리스트 -->
-	<select id = "selectReplyList" resultMap="replyResult">
+	<select id = "selectReplyList" parameterType="int" resultMap="replyResult">
 	<![CDATA[
 		select repno, bno, content, del_chk,
 			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 

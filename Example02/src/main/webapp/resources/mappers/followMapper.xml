@@ -21,17 +21,17 @@
 	
 	
 	<!-- 팔로우하기 -->
-	<insert id ="insertFollow">
+	<insert id ="insertFollow" parameterType="FollowVO">
 		insert into Follow (m_id, t_id) values (#{m_id},#{t_id})
 	</insert>
 	
 	<!-- 언팔로우 -->
-	<delete id ="deleteFollow">
+	<delete id ="deleteFollow" parameterType="FollowVO">
 		delete from Follow where m_id = #{m_id} and t_id = #{t_id}
 	</delete>
 	
 	<!-- 팔로잉 -->
-	<select id="selectFollowing" resultMap="followingProfile">
+	<select id="selectFollowing" parameterType="int" resultMap="followingProfile">
 		select *
 		from follow f join (select user_no, id from member) m
 		on t_id = m.user_no
@@ -40,7 +40,7 @@
 	</select>
 	
 	<!-- 팔로워 -->
-	<select id="selectFollower" resultMap="followerProfile">
+	<select id="selectFollower" parameterType="int" resultMap="followerProfile">
 		select *
 		from follow f join (select user_no, id from member) m
 		on m_id = m.user_no
@@ -49,19 +49,19 @@
 	</select>
 	
 	<!-- 팔로잉 수 -->
-	<select id="countFollow" resultType="int">
+	<select id="countFollow" parameterType="int" resultType="int">
 		select count(*) cnt from follow
 		where m_id = #{user_no}
 	</select>
 	
 	<!-- 팔로워 수 -->
-	<select id="countFollower" resultType="int">
+	<select id="countFollower" parameterType="int" resultType="int">
 		select count(*) cnt from follow
 		where t_id = #{user_no}
 	</select>
 	
 	<!-- 팔로우 중인가? -->
-	<select id="isFollow" resultType="com.spring.ex02.vo.FollowVO">
+	<select id="isFollow" resultType="FollowVO">
 		select * from follow
 		where m_id = #{m_id}
 		and t_id = #{t_id}

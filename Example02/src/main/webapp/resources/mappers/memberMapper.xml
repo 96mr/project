@@ -21,7 +21,7 @@
 	</resultMap>
 	
 	<!-- 회원가입 -->
-	<insert id ="insertMember">
+	<insert id ="insertMember" parameterType="MemberVO">
 		<selectKey keyProperty="user_no" resultType="int" order="BEFORE">
 			select member_no_seq.nextval FROM DUAL
 		</selectKey>
@@ -32,7 +32,7 @@
 	</insert>
 	
 	<!-- 프로필 -->
-	<insert id = "insertProfile">
+	<insert id = "insertProfile" parameterType="ProfileVO">
 		insert into 
 			Profile 
 		values
@@ -40,7 +40,7 @@
 	</insert>
 	
 	<!-- 프로필 이미지 파일 -->
-	<insert id = "insertProfileImageFile">
+	<insert id = "insertProfileImageFile" parameterType="FileVO">
 		<selectKey keyProperty="fno" resultType="int" order="BEFORE">
 			select file_no_seq.nextval FROM DUAL
 		</selectKey>
@@ -51,7 +51,7 @@
 	</insert>
 	
 	<!-- 아이디로 회원정보 가져오기 (로그인 시 사용) -->
-	<select id="selectById" resultType="com.spring.ex02.vo.MemberVO">
+	<select id="selectById" parameterType="String" resultType="MemberVO">
 		select * 
 		from member
 		where id = #{id}
@@ -72,7 +72,7 @@
 	</select>
 	
 	<!-- 프로필 가져오기 -->
-	<select id="selectProfile" resultMap="profileResult">
+	<select id="selectProfile" parameterType="int" resultMap="profileResult">
 		select * 
 		from profile p join fileinfo f
 		on p.image = f.fno
@@ -80,7 +80,7 @@
 	</select>
 	
 	<!-- 프로필 사진 -->
-	<select id="selectProfileImage" resultType="FileVO">
+	<select id="selectProfileImage" parameterType="int" resultType="FileVO">
 		select f.fno, org_name, save_name, round(f_size/1024, 1) as f_size 
 		from fileinfo f, profile p
 		where f.fno = p.image
@@ -88,14 +88,14 @@
 	</select>
 	
 	<!-- 이메일로 회원 아이디 찾기 -->
-	<select id="searchByEmail" resultType ="String">
+	<select id="searchByEmail" parameterType="String" resultType ="String">
 		select id 
 		from member 
 		where email = #{email}
 	</select>
 	
 	<!-- 회원정보수정 -->
-	<update id="updateMember">
+	<update id="updateMember" parameterType="MemberVO">
 		update member
 		set 
 			id = #{id}, birth = #{birth, jdbcType=VARCHAR},phone = #{phone, jdbcType=VARCHAR},email = #{email, jdbcType=VARCHAR}
@@ -103,7 +103,7 @@
 	</update>
 	
 	<!-- 비밀번호변경 -->
-	<update id="updatePassword">
+	<update id="updatePassword" parameterType="MemberVO">
 		update member
 		set 
 			password = #{password}
@@ -111,7 +111,7 @@
 	</update>
 	
 	<!-- 프로필 정보변경 -->
-	<update id="updateProfile">
+	<update id="updateProfile" parameterType="ProfileVO">
 		update profile
 		set 
 			name = #{name}, introduce= #{introduce} 
@@ -119,7 +119,7 @@
 	</update>
 	
 	<!-- 프로필사진 변경 -->
-	<update id="updateProfileImage">
+	<update id="updateProfileImage" parameterType="FileVO">
 		update fileinfo
 		set 
 			org_name = #{org_name}, save_name = #{save_name}, f_size = #{f_size}

@@ -16,7 +16,7 @@
 	</resultMap>
 	
 	<!-- 글 작성 -->
-	<insert id ="insertBoard">
+	<insert id ="write" parameterType="BoardVO">	
 		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
 			select board_no_seq.nextval FROM DUAL
 		</selectKey>
@@ -27,7 +27,7 @@
 	</insert>
 	
 	<!-- 파일 첨부업로드 -->
-	<insert id="insertFile">
+	<insert id="insertFile" parameterType="FileVO">
 		<selectKey keyProperty="fno" resultType="int" order="BEFORE">
 			select FILE_NO_SEQ.nextval FROM DUAL
 		</selectKey>
@@ -37,7 +37,7 @@
 			(#{fno}, #{org_name}, #{save_name}, #{f_size}, #{reg_id})
 	</insert>
 	
-	<insert id="insertBoardFile">
+	<insert id="insertBoardFile" parameterType="java.util.Map">
 		insert into 
 			board_file 
 		values
@@ -53,7 +53,7 @@
 	</select>
 	
 	<!-- 게시글 검색 -->
-	<select id="searchList" resultMap="boardResult">
+	<select id="searchList" parameterType="java.util.Map" resultMap="boardResult">
 	<![CDATA[
 		select rnum, bno, content, writer_id,
 			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
@@ -84,7 +84,7 @@
 	</select>
 	
 	<!-- 타임라인 게시글 리스트 읽어오기 -->
-	<select id="searchTimeLineList" parameterType="java.util.Map" resultMap="boardResult">
+	<select id="selectTimeLineList" parameterType="java.util.Map" resultMap="boardResult">
 	<![CDATA[
 		select rnum, bno, content, writer_id,  
 			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
@@ -111,7 +111,7 @@
 	</select>
 	
 	<!-- 멤버 게시글 리스트 -->
-	<select id="searchBoardList" resultMap="boardResult">
+	<select id="selectBoardList" parameterType="java.util.Map" resultMap="boardResult">
 	<![CDATA[
 		select rnum, bno, content, writer_id,
 			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
@@ -147,7 +147,7 @@
 	
 	
 	<!-- 좋아요 한 글 -->
-	<select id="searchLikeList" resultMap="boardResult">
+	<select id="likeList" parameterType="java.util.Map" resultMap="boardResult">
 	<![CDATA[
 		select rnum, bno, content, writer_id, 
 			case when TO_CHAR(SYSDATE ,'yyyy/mm/dd hh24:mi:ss') < to_char(regdate + 1/(24*60), 'yyyy/mm/dd hh24:mi:ss') 
@@ -175,7 +175,7 @@
 	</select> 
 	
 	<!--  게시글 상세보기 -->
-	<select id = "detailBoard" resultMap ="boardResult">
+	<select id = "detailBoard" parameterType="int" resultMap ="boardResult">
 	<![CDATA[
 		select bno, content, writer_id, to_char(regdate, 'yyyy"년"MM"월"dd"일" am hh"시" mi"분"') regdate 
 		from board b, (select user_no, id from member) m
@@ -186,14 +186,14 @@
 	</select>
 	
 	<!-- 게시글 총 개수 -->
-	<select id="countBoard" resultType="int">
+	<select id="countBoard" parameterType="int" resultType="int">
 		select count(*) as cnt from board
 		where writer_id = #{id}
 		and del_chk='N'
 	</select>
 	
 	<!-- 게시글 삭제 -->
-	<update id="deleteBoard">
+	<update id="deleteBoard" parameterType="int">
 	<![CDATA[
 		update board set del_chk = 'Y' where bno = #{bno}
 	]]>

@@ -2,72 +2,67 @@ package com.spring.ex02.dao;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.ex02.mapper.MemberMapper;
 import com.spring.ex02.vo.FileVO;
 import com.spring.ex02.vo.MemberVO;
 import com.spring.ex02.vo.ProfileVO;
 
 @Repository
 public class MemberDaoImpl implements MemberDao{
-	@Inject
-	private SqlSession sqlSession;
-	
-	private static String namespace="com.spring.ex02.mapper.MemberMapper";
-	
-	@Override
-	public MemberVO selectById(String id) throws Exception{
-		return sqlSession.selectOne(namespace+".selectById",id);
-	}
-	@Override
-	public MemberVO ProfileList(int no) throws Exception{
-		return sqlSession.selectOne(namespace+".selectProfileList",no);
-	}
+	@Autowired
+	private MemberMapper mapper;
+
 	@Override
 	public int insertMember(MemberVO member) throws Exception{
-		sqlSession.insert(namespace+".insertMember", member);
+		mapper.insertMember(member);
 		return member.getUser_no();
 	}
-	
 	@Override
 	public void insertProfile(ProfileVO vo) throws Exception {
-		sqlSession.insert(namespace+".insertProfile", vo);
-	}
-	
-	@Override
-	public ProfileVO selectProfile(int user_no) throws Exception {
-		return sqlSession.selectOne(namespace+".selectProfile", user_no);
-	}
-	@Override
-	public void updateProfile(ProfileVO profile) throws Exception{
-		sqlSession.update(namespace+".updateProfile", profile);
-	}
-	@Override
-	public FileVO selectProfileImage(int user_no) throws Exception {
-		return sqlSession.selectOne(namespace+".selectProfileImage", user_no);
+		mapper.insertProfile(vo);
 	}
 	@Override
 	public int insertProfileImageFile(FileVO vo) throws Exception {
-		sqlSession.insert(namespace+".insertProfileImageFile", vo);
+		mapper.insertProfileImageFile(vo);
 		return vo.getFno();
 	}
 	@Override
+	public MemberVO selectById(String id) throws Exception{
+		return mapper.selectById(id);
+	}
+	@Override
+	public MemberVO selectProfileList(int no) throws Exception{
+		return mapper.selectProfileList(no);
+	}
+	@Override
+	public ProfileVO selectProfile(int user_no) throws Exception {
+		return mapper.selectProfile(user_no);
+	}
+	@Override
+	public void updateProfile(ProfileVO profile) throws Exception{
+		mapper.updateProfile(profile);
+	}
+	@Override
+	public FileVO selectProfileImage(int user_no) throws Exception {
+		return mapper.selectProfileImage(user_no);
+	}
+	@Override
 	public void updateProfileImage(FileVO vo) throws Exception {
-		sqlSession.update(namespace+".updateProfileImage", vo);
+		mapper.updateProfileImage(vo);
 	}
 	@Override
 	public void updateMember(MemberVO member) throws Exception {
-		sqlSession.update(namespace+".updateMember", member);
+		mapper.updateMember(member);
 	}
 	@Override
 	public void updatePassword(MemberVO member) throws Exception {
-		sqlSession.update(namespace+".updatePassword", member);
+		mapper.updatePassword(member);
 	}
 	@Override
 	public List<String> searchByEmail(String email) throws Exception {
-		return sqlSession.selectList(namespace+".searchByEmail", email);
+		return mapper.searchByEmail(email);
 	}
 }

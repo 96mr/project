@@ -12,7 +12,7 @@ public interface MemberDao {
 	public int insertProfileImageFile(FileVO vo) throws Exception;
 	
 	public MemberVO selectById(String id) throws Exception;
-	public MemberVO ProfileList(int no) throws Exception;
+	public MemberVO selectProfileList(int no) throws Exception;
 	public ProfileVO selectProfile(int user_no) throws Exception;
 	public FileVO selectProfileImage(int user_no) throws Exception;
 	

@@ -30,6 +30,7 @@ public class FollowController {
 
 	@RequestMapping(value="/isFollow", method = RequestMethod.POST)
 	public int isFollow(@RequestParam("id") String id, HttpSession session) throws Exception{
+		logger.info(id+" follow ? ");
 		String user_id = (String) session.getAttribute("sessionID");
 		Boolean result = false;
 		if(user_id !=null) 
@@ -43,8 +44,8 @@ public class FollowController {
 	
 	@RequestMapping(value="/follow/add", method = RequestMethod.POST)
 	public int addFollow(@RequestParam("id") String id, HttpSession session) throws Exception{
+		logger.info("follow add , target = "+ id);
 		String user_id = (String) session.getAttribute("sessionID");
-		System.out.println("m_id:"+user_id+"t_id"+id);
 		int result = 0;
 		if(user_id !=null) 
 			result = service.addFollow(user_id, id);
@@ -53,6 +54,7 @@ public class FollowController {
 	
 	@RequestMapping(value="/follow/delete", method = RequestMethod.POST)
 	public int unFollow(@RequestParam("id") String id, HttpSession session) throws Exception{
+		logger.info("follow delete , target = "+ id);
 		String user_id = (String) session.getAttribute("sessionID");
 		int result = 0;
 		if(user_id !=null) 

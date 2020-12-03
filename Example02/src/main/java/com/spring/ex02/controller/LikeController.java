@@ -30,7 +30,7 @@ public class LikeController {
 	
 	
 	@RequestMapping(value = "/like/add", method = RequestMethod.POST)
-	public String addLike(@RequestParam("no") int bno, HttpSession session, Model model) throws Exception {
+	public String addLike(@RequestParam("no") int bno, HttpSession session) throws Exception {
 		logger.info("add like : " + bno);
 		String id = (String) session.getAttribute("sessionID");
 		String result = null;
@@ -41,7 +41,7 @@ public class LikeController {
 	}
 	
 	@RequestMapping(value = "/like/delete", method = RequestMethod.POST)
-	public int deleteLike(@RequestParam("no") int bno, HttpSession session, Model model) throws Exception {
+	public int deleteLike(@RequestParam("no") int bno, HttpSession session) throws Exception {
 		logger.info("delete like : " + bno);
 		String id = (String) session.getAttribute("sessionID");
 		int result = 0;
@@ -53,7 +53,7 @@ public class LikeController {
 	}
 	
 	@RequestMapping(value = "/islike/{no}", method = RequestMethod.POST)
-	public int isLike(@PathVariable("no") int bno, HttpSession session, Model model) throws Exception {
+	public int isLike(@PathVariable("no") int bno, HttpSession session) throws Exception {
 		logger.info("is like :"+ bno);
 		String id = (String) session.getAttribute("sessionID");
 		int result = 0;
@@ -64,7 +64,7 @@ public class LikeController {
 	}
 	
 	@RequestMapping(value = "/likes/{no}", method = RequestMethod.POST)
-	public List<MemberVO> boardLike(@PathVariable("no") int bno, Model model) throws Exception {
+	public List<MemberVO> boardLike(@PathVariable("no") int bno) throws Exception {
 		logger.info("boardliker :"+ bno);
 		List<MemberVO> vo = likeService.boardLikerList(bno);
 		return vo;

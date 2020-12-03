@@ -77,12 +77,10 @@ public class BoardServiceImpl implements BoardService {
 			user_no = vo.getUser_no();		//해당 프로필의 회원 번호
 			
 			//게시글 리스트
-			if(tab == 3) { 	
+			if(tab == 3) 
 				list = boardDao.likeList(user_no, curPage);
-			}
-			else { 
-				list = boardDao.boardlist(user_no, tab, curPage); 
-			}		
+			else 
+				list = boardDao.boardlist(user_no, tab, curPage); 		
 			
 			
 			//로그인 여부
@@ -90,7 +88,7 @@ public class BoardServiceImpl implements BoardService {
 			if(id != null) {
 				login_no = memberDao.selectById(id).getUser_no();		
 			}
-			for(Iterator<BoardVO> i = list.iterator() ; i.hasNext() ;) {
+			for(Iterator<BoardVO> i = list.iterator() ; i.hasNext();) {
 				BoardVO b = i.next();
 				
 				if(login_no != 0) {
@@ -99,7 +97,7 @@ public class BoardServiceImpl implements BoardService {
 				}
 			}	
 		}
-		result.put("user", memberDao.ProfileList(user_no));
+		result.put("user", memberDao.selectProfileList(user_no));
 		result.put("board", list);
 		result.put("board_cnt", boardDao.boardCount(user_no));
 		return result;

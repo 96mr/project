@@ -55,16 +55,16 @@ public class MemberController {
 						Model model, RedirectAttributes rttr) throws Exception{
 		logger.info("join : ");
 		
-		if(result.hasErrors()) {
+		if(result.hasErrors()) {	//validate
 			return "register"; 
 		}
 		
-		if(!member.getPw_chk().equals(member.getPassword())) {
+		if(!member.getPw_chk().equals(member.getPassword())) {	//비밀번호 체크 일치여부 확인
 			model.addAttribute("fail_msg", "비밀번호가 일치하지 않습니다");
 			return "register";
 		}
 		
-		int joinResult = service.memberJoin(member); // 받아온 회원 정보를 서비스로 넘겨줌
+		int joinResult = service.memberJoin(member); // 받아온 회원 정보를 서비스로 넘김
 		if(joinResult == 1) {
 			rttr.addFlashAttribute("msg", "성공적으로 가입되었습니다!");
 			return "redirect:/login";
@@ -186,7 +186,7 @@ public class MemberController {
 	@RequestMapping(value = "/settings/password", method = RequestMethod.POST)
 	public String edit_password(@RequestParam("pw") String pw,@RequestParam("new_pw") String new_pw, @RequestParam("new_pwChk") String pwChk, 
 								HttpSession session, Model model, RedirectAttributes rttr) throws Exception {
-		logger.info("edit password pw : "+ pw +", new_pw : "+ ", pwchk : " + pwChk);
+		logger.info("edit password");
 		
 		String user = (String) session.getAttribute("sessionID"); //현재 로그인한 회원 아이디
 			

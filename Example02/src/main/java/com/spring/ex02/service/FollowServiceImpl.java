@@ -61,8 +61,7 @@ public class FollowServiceImpl implements FollowService {
 		int m_id = m_vo.getUser_no();
 		int t_id = t_vo.getUser_no();
 		
-		FollowVO vo = new FollowVO(m_id, t_id);
-		FollowVO result = followdao.isFollow(vo);
+		FollowVO result = followdao.isFollow(new FollowVO(m_id, t_id));
 		if(result == null)
 			return false;
 		else

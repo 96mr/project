@@ -38,14 +38,19 @@ public class BoardController {
 	@Resource(name="MemberService") private MemberService memberService;
 	
 	@RequestMapping(value = {"/","/index","/home"}, method = RequestMethod.GET)
-	public String home(HttpSession session, Model model) throws Exception {
+	public String home(HttpSession session, Model model){
 		logger.info("home :");
 		String user_id = (String) session.getAttribute("sessionID");
 		if(user_id == null) {
 			return "redirect:/browse";
 		}
-		List<BoardVO> vo = boardService.timelineList(user_id, 0);	//회원+팔로우 게시글
-		model.addAttribute("timeline", vo);
+		List<BoardVO> vo;
+		try {
+			vo = boardService.timelineList(user_id, 0);//회원+팔로우 게시글
+			model.addAttribute("timeline", vo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "home";
 	}
 	
@@ -201,9 +206,9 @@ public class BoardController {
 		logger.info("search :"+ word.toString());
 		String login_id = (String) session.getAttribute("sessionID");
 		List<BoardVO> vo = boardService.searchList(option, word, login_id, 0);
-		model.addAttribute("search_option", option);
-		model.addAttribute("keyword", word);
-		model.addAttribute("search_result",vo);
+		model.addAttribute("search_option", option)
+			 .addAttribute("keyword", word)
+			 .addAttribute("search_result",vo);
 		return "search";
 	}
 	

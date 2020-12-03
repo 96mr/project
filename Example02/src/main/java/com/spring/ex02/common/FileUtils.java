@@ -1,12 +1,11 @@
 package com.spring.ex02.common;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,13 +13,12 @@ import com.spring.ex02.vo.FileVO;
 
 @Component("fileUtils")
 public class FileUtils {
-	private Log logger = LogFactory.getLog(this.getClass());
 
 	private static final String uploadPath = "E:\\workspace-sts\\.metadata\\.plugins\\"
 											+ "org.eclipse.wst.server.core\\tmp0\\"
 											+ "wtpwebapps\\Example02\\resources\\images";	//저장위치
 
-	public List<FileVO> parseFileInfo(int reg_id, MultipartFile[] file) throws Exception {
+	public List<FileVO> parseFileInfo(int reg_id, MultipartFile[] file) {
 		
 		List<FileVO> fileList = new ArrayList<FileVO>();  //파일 리스트를 만듦
 
@@ -42,15 +40,19 @@ public class FileUtils {
 				if((extension.equals(".png")||extension.equals(".jpg")||extension.equals(".gif"))){ //확장자 검사
 				
 					target = new File(uploadPath, saveFileName); //uploadPath(경로)의 폴더에 saveFileName파일의  객체 생성
-					file[i].transferTo(target);					 //
+					try {
+						file[i].transferTo(target);
+						
+						FileVO fileInfo = new FileVO(); //파일 정보 리스트에 추가
+						fileInfo.setOrg_name(orgFileName);
+						fileInfo.setSave_name(saveFileName);
+						fileInfo.setF_size(saveFileSize);
+						fileInfo.setReg_id(reg_id);
+						fileList.add(fileInfo);
+					} catch (IllegalStateException | IOException e) {
+						e.printStackTrace();
+					}
 					
-					FileVO fileInfo = new FileVO(); //파일 정보 리스트에 추가
-					fileInfo.setOrg_name(orgFileName);
-					fileInfo.setSave_name(saveFileName);
-					fileInfo.setF_size(saveFileSize);
-					fileInfo.setReg_id(reg_id);
-					fileList.add(fileInfo);
-					System.out.println("FileUtils reg_id : "+ reg_id);
 				}
 				
 			}

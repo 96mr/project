@@ -1,14 +1,10 @@
 package com.spring.ex02.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 class BoardControllerTest {
-
 	@Test
 	void testProfileall() {
-		System.out.println("헝");
 	}
 
 	@Test

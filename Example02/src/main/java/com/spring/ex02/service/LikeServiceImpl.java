@@ -36,7 +36,7 @@ public class LikeServiceImpl implements LikeService {
 	public String addLike(int bno, String id) throws Exception {
 		BoardVO board= boardDao.boardDetail(bno);
 		MemberVO member = memberDao.selectById(id);
-		String result = "yse";
+		String result = "";
 		if(member != null && board != null) {
 			int liker_id = member.getUser_no();
 			LikeVO vo = new LikeVO(bno, liker_id);
@@ -65,8 +65,7 @@ public class LikeServiceImpl implements LikeService {
 			int like_id = member.getUser_no();
 			LikeVO vo = new LikeVO(bno, like_id);
 			likeDao.deleteLike(vo);
-		}
-		
+		}		
 	}
 
 	@Override

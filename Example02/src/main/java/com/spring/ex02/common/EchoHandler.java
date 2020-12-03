@@ -16,7 +16,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.spring.ex02.dao.MemberDao;
 import com.spring.ex02.dao.NoticeDao;
-import com.spring.ex02.vo.MemberVO;
 
 @Component("echoHandler")
 public class EchoHandler extends TextWebSocketHandler {
@@ -40,9 +39,8 @@ public class EchoHandler extends TextWebSocketHandler {
 
 	//메세지 보냄
 	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+	protected void handleTextMessage(WebSocketSession session, TextMessage message){
 		String msg = message.getPayload();
-		System.out.println("msg:"+msg);
 		//실시간 알람	
 		Map<String, Object> map = null;
 		for (WebSocketSession websession : sessions) {
@@ -50,14 +48,20 @@ public class EchoHandler extends TextWebSocketHandler {
 		         String login = (String)map.get("sessionID");
 		         //받는사람
 		         if (login.equals(msg)) {
-		        	 System.out.println("send:");
-		        	 int id = memberDao.selectById(msg).getUser_no();
-		        	 int newNotice = noticeDao.newNotice(id);
-		             websession.sendMessage(new TextMessage((newNotice!=0)?newNotice+"":""));
+		        	 int id;
+					try {
+						id = memberDao.selectById(msg).getUser_no();
+						int newNotice = noticeDao.newNotice(id);
+			            websession.sendMessage(new TextMessage((newNotice!=0)?newNotice+"":""));
+			        	logger.info("{} 연결, {} 보냄", session.getId(), message.getPayload());
+					} catch (NullPointerException e){
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+		  
 		         }
 		}
-
-		logger.info("{} 연결, {} 보냄", session.getId(), message.getPayload());
 	}
 
 	//접속 해제

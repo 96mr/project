@@ -1,14 +1,12 @@
 package com.spring.ex02.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 class HomeControllerTest {
 
 	@Test
 	void testHome() {
-		fail("Not yet implemented");
+	
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import com.spring.ex02.vo.ProfileVO;
 
 @Service("MemberService")
 public class MemberServiceImpl implements MemberService {
-	@Inject
+	@Autowired
 	private MemberDao dao;
 	
 	@Inject

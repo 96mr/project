@@ -13,7 +13,7 @@
         <property name="port" value="587" />
         <property name="defaultEncoding" value="utf-8"/>
         <property name="username" value="exmerang@gmail.com" />
-        <property name="password" value="jspex123" />
+        <property name="password" value="ㅍㅍ" />
        
         <property name="javaMailProperties">
             <props>
